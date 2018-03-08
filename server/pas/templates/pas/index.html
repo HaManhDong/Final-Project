@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% if user_list %}
+    <table style="width:50%">
+        <tr>
+            <th>User name</th>
+            <th>Email</th>
+            <th>Card id</th>
+        </tr>
+        {% for u in user_list %}
+            <tr>
+                <td>{{ u.name }}</td>
+                <td>{{ u.email }}</td>
+                <td>{{ u.card_id }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    <p>No user.</p>
+{% endif %}
+</body>
+</html>
