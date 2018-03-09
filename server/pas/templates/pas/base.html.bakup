@@ -1,0 +1,253 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Dashboard</title>
+
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'pas/bower_components/bootstrap/dist/css/bootstrap.min.css' %}"/>
+    <link rel="stylesheet" href="{% static 'pas/bower_components/font-awesome/css/font-awesome.min.css' %}"/>
+    <link rel="stylesheet" href="{% static 'pas/dist/css/AdminLTE.min.css' %}"/>
+    <link rel="stylesheet" href="{% static 'pas/dist/css/skins/_all-skins.min.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'pas/css/chart.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'pas/css/dashboard.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'pas/css/select2.min.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'pas/js/plugins/datatables/jquery.dataTables.css' %}"/>
+    <!--<link rel="stylesheet" type="text/css" href="/dashboard/static/js/plugins/datatables/dataTables.bootstrap.css">-->
+
+</head>
+
+<!--<body class="fixed sidebar-mini sidebar-mini-expand-feature skin-black-light">-->
+<body class="sidebar-mini skin-blue">
+<div class="wrapper">
+    <header class="main-header">
+        <!-- Header Navbar: style can be found in header.less -->
+        <a href="index.html" class="logo">
+            <span class="logo-lg"><b>PAS</b></span>
+        </a>
+        <nav class="navbar navbar-static-top">
+            <!-- Sidebar toggle button-->
+            <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+                <span class="sr-only">Toggle navigation</span>
+            </a>
+
+            <div class="navbar-custom-menu">
+            </div>
+        </nav>
+    </header>
+    <!-- Sidebar -->
+    <aside class="main-sidebar">
+        <!-- sidebar: style can be found in sidebar.less -->
+        <section class="sidebar">
+            <ul class="sidebar-menu" id="sidebar-menu">
+                <li class="active pas-sidebar-element">
+                    <a href="#" id="dashboard">
+                        <i class="fa fa-dashboard" aria-hidden="true"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="pas-sidebar-element">
+                    <a href="#" id="sensors-info">
+                        <i class="fa fa-users" aria-hidden="true"></i>
+                        <span>Users</span>
+                    </a>
+                </li>
+                <li class="pas-sidebar-element">
+                    <a href="#" id="devices-info">
+                        <i class="fa fa-columns" aria-hidden="true"></i>
+                        <span>Devices</span>
+                    </a>
+                </li>
+            </ul>
+        </section>
+        <!-- /.sidebar -->
+    </aside>
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+
+        <section class="content-header">
+            <h1 id="content-header-text">
+                International Institute for Computational Science and Engineering LAB
+            </h1>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <div class="col-sm-6 col-md-3">
+                    <div class="box box-solid">
+                        <div class="box-body">
+                            <div class="small-box bg-aqua">
+                                <div class="inner">
+                                    <h3>10</h3>
+                                    <p>Persons in LAB</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fa fa-users"></i>
+                                </div>
+                                <div class="small-box-footer">now</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <div class="box box-solid">
+                        <div class="box-body">
+                            <div class="small-box bg-yellow">
+                                <div class="inner">
+                                    <h3>2</h3>
+                                    <p>Persons can't recognition</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fa fa-warning"></i>
+                                </div>
+                                <div class="small-box-footer">warning</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <div class="box box-solid">
+                        <div class="box-body">
+                            <div class="small-box bg-green">
+                                <div class="inner">
+                                    <h3>2</h3>
+                                    <p>Devices</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fa fa-columns"></i>
+                                </div>
+                                <a href="#" class="small-box-footer">
+                                    More info
+                                    <i class="fa fa-arrow-circle-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="box box-solid">
+                    <div class="box-body">
+                        <h3 style="background-color:#f7f7f7; text-align: center; padding: 7px 10px; margin-top: 0;
+                                   cursor: pointer;">
+                            Add user
+                        </h3>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <h4 style="text-align: center;">User info</h4>
+                                <hr>
+                                <form class="form-horizontal">
+                                    <div class="box-body">
+                                        <div class="form-group">
+                                            <label for="add-user-name" class="col-sm-2 control-label">Name</label>
+
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" id="add-user-name"
+                                                       placeholder="Full Name">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="add-user-email" class="col-sm-2 control-label">Email</label>
+
+                                            <div class="col-sm-10">
+                                                <input type="email" class="form-control" id="add-user-email"
+                                                       placeholder="Email">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /.box-body -->
+                                </form>
+                            </div>
+
+                            <div class="col-sm-4">
+                                <h4 style="text-align: center;">Scan RFID card</h4>
+                                <hr>
+                                <div style="text-align: center; font-size: 18px;">
+                                    <div class="rfid-card-id" style="display: none">
+                                        11 22 aa bb
+                                    </div>
+                                    <br/>
+                                    <div class="">
+                                        <button type="button" class="btn btn-default" style="font-size: 18px;">Scan
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="overlay">
+                                    <i class="fa fa-refresh fa-spin"></i>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4">
+                                <h4 style="text-align: center;">Upload picture</h4>
+                                <hr>
+                                <div class="" style="text-align: center;">
+                                    <br/>
+                                    <div class="">
+                                        <button type="button" class="btn btn-default" style="font-size: 18px;">Upload
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box-footer" style="text-align: center">
+                        <button type="button" class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
+            </div>
+
+            {#            <div class="row">#}
+            {#                <div class="col-lg-4 col-md-5 col-xs-6">#}
+            {#                    <div class="info-box">#}
+            {#                        <span class="info-box-icon bg-aqua"><i class="fa fa-thermometer-4"></i></span>#}
+            {#                        <div class="info-box-content">#}
+            {#                            <span class="info-box-text">Persons in LAB</span>#}
+            {#                            <h3><span style="font-size: 28px !important;">30</span></h3>#}
+            {#                        </div>#}
+            {#                    </div>#}
+            {#                </div>#}
+            {#            </div>#}
+
+
+        </section>
+    </div>
+    <footer class="main-footer">
+        <div class="pull-right hidden-xs">
+            <b>Version</b> 1.1.0
+        </div>
+        <strong>Designed by <a href="#">Ha Manh Dong</a>.</strong>
+    </footer>
+</div>
+
+</body>
+
+<!-- Script Section -->
+{% load static %}
+<script type="text/javascript" src="{% static '/pas/js/plugins/jquery-3.2.1.min.js' %}"></script>
+<script type="text/javascript" src="{% static '/pas/js/plugins/select2.min.js' %}"></script>
+<script type="text/javascript" src="{% static '/pas/js/plugins/d3.v3.min.js' %}"></script>
+<script type="text/javascript" src="{% static '/pas/js/plugins/Chart.min.js' %}"></script>
+<script type="text/javascript" src="{% static '/pas/js/plugins/Chart.PieceLabel.min.js' %}"></script>
+<!--datatables script -->
+<script type="text/javascript" src="{% static '/pas/js/plugins/datatables/jquery.dataTables.js' %}"></script>
+<script type="text/javascript" src="{% static '/pas/js/plugins/datatables/dataTables.bootstrap.js' %}"></script>
+
+<script src="{% static '/pas/bower_components/bootstrap.min.js' %}"></script>
+<script src="{% static '/pas/bower_components/jquery.slimscroll.js' %}"></script>
+<script src="{% static '/pas/bower_components/adminlte.min.js' %}"></script>
+
+<script type="text/javascript" src="{% static '/pas/js/main.js' %}"></script>
+
+<!-- //Script Section -->
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#dashboard').click();
+    });
+</script>
+
+</html>

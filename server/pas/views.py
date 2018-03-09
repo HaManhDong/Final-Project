@@ -13,3 +13,7 @@ def index(request):
     except User.DoesNotExist:
         raise Http404("Question does not exist")
     return render(request, 'pas/index.html', context)
+
+
+def devices_info(request):
+    return render(request, 'pas/devices.html')

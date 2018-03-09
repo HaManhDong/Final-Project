@@ -1,27 +1,144 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-{% if user_list %}
-    <table style="width:50%">
-        <tr>
-            <th>User name</th>
-            <th>Email</th>
-            <th>Card id</th>
-        </tr>
-        {% for u in user_list %}
-            <tr>
-                <td>{{ u.name }}</td>
-                <td>{{ u.email }}</td>
-                <td>{{ u.card_id }}</td>
-            </tr>
-        {% endfor %}
-    </table>
-{% else %}
-    <p>No user.</p>
-{% endif %}
-</body>
-</html>
+{% extends "pas/base.html" %}
+
+{% block content-header %}
+    <h1 id="content-header-text">
+        International Institute for Computational Science and Engineering LAB
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        {#        <li class="active">Widgets</li>#}
+    </ol>
+{% endblock content-header %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-sm-6 col-md-3">
+            <div class="box box-solid">
+                <div class="box-body">
+                    <div class="small-box bg-aqua">
+                        <div class="inner">
+                            <h3>10</h3>
+                            <p>Persons in LAB</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-users"></i>
+                        </div>
+                        <div class="small-box-footer">now</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-3">
+            <div class="box box-solid">
+                <div class="box-body">
+                    <div class="small-box bg-yellow">
+                        <div class="inner">
+                            <h3>2</h3>
+                            <p>Persons can't recognition</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-warning"></i>
+                        </div>
+                        <div class="small-box-footer">warning</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-3">
+            <div class="box box-solid">
+                <div class="box-body">
+                    <div class="small-box bg-green">
+                        <div class="inner">
+                            <h3 id="number-of-devices-box">0</h3>
+                            <p>Devices</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-columns"></i>
+                        </div>
+                        <a href="{% url 'devices-info' %}" class="small-box-footer">
+                            More info
+                            <i class="fa fa-arrow-circle-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="box box-solid">
+            <div class="box-body">
+                <h3 style="background-color:#f7f7f7; text-align: center; padding: 7px 10px; margin-top: 0;
+                                   cursor: pointer;">
+                    Add user
+                </h3>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <h4 style="text-align: center;">User info</h4>
+                        <hr>
+                        <form class="form-horizontal">
+                            <div class="box-body">
+                                <div class="form-group">
+                                    <label for="add-user-name" class="col-sm-2 control-label">Name</label>
+
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="add-user-name"
+                                               placeholder="Full Name">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="add-user-email" class="col-sm-2 control-label">Email</label>
+
+                                    <div class="col-sm-10">
+                                        <input type="email" class="form-control" id="add-user-email"
+                                               placeholder="Email">
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.box-body -->
+                        </form>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <h4 style="text-align: center;">Scan RFID card</h4>
+                        <hr>
+                        <div style="text-align: center; font-size: 18px;">
+                            <div class="rfid-card-id" style="display: none">
+                                11 22 aa bb
+                            </div>
+                            <br/>
+                            <div class="">
+                                <button type="button" class="btn btn-default" style="font-size: 18px;">Scan
+                                </button>
+                            </div>
+                        </div>
+                        <div class="overlay">
+                            <i class="fa fa-refresh fa-spin"></i>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <h4 style="text-align: center;">Upload picture</h4>
+                        <hr>
+                        <div class="" style="text-align: center;">
+                            <br/>
+                            <div class="">
+                                <button type="button" class="btn btn-default" style="font-size: 18px;">Upload
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="box-footer" style="text-align: center">
+                <button type="button" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+
+{% block scripts %}
+    {% load static %}
+    <script type="text/javascript" src="{% static '/pas/js/index.js' %}"></script>
+    <script type="text/javascript" src="{% static '/pas/js/plugins/mqttws31.min.js' %}"></script>
+{% endblock scripts %}

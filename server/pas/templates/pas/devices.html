@@ -1,0 +1,23 @@
+{% extends "pas/base.html" %}
+
+{% block content-header %}
+    <h1 id="content-header-text">
+        Devices Info
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Devices info</li>
+    </ol>
+{% endblock content-header %}
+
+{% block content %}
+    <div class="row pas-datatables-info-container">
+        <table id="pas-datatables-devices-info" class="display" width="100%">
+        </table>
+    </div>
+{% endblock content %}
+
+{% block scripts %}
+    {% load static %}
+    <script type="text/javascript" src="{% static '/pas/js/devices.js' %}"></script>
+{% endblock scripts %}
