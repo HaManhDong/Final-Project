@@ -1,3 +1,10 @@
+*.png
+*.jpg
+haarcascade_frontalface_default.xml
+faces/*
+galileo_venv/*
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
