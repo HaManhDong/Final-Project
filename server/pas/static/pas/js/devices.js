@@ -5,9 +5,8 @@ $(document).ready(function () {
     var devicesTable;
 
     $('#devices-info').click();
-    $.get('http://localhost:8080/rest/items', function (res, status, req) {
+    $.get(OPENHAB_API_ITEMS, function (res, status, req) {
         if (req.getResponseHeader('Content-Type') === 'application/json') {
-            console.log(res.length);
             let data_display = [];
             for (let i = 0; i < res.length; i++) {
                 data_display.push([

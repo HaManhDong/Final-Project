@@ -65,7 +65,7 @@
         </div>
     </div>
 
-    <div class="row">
+    <div class="row add-user-panel">
         <div class="box box-solid">
             <div class="box-body">
                 <h3 style="background-color:#f7f7f7; text-align: center; padding: 7px 10px; margin-top: 0;
@@ -103,17 +103,17 @@
                         <h4 style="text-align: center;">Scan RFID card</h4>
                         <hr>
                         <div style="text-align: center; font-size: 18px;">
-                            <div class="rfid-card-id" style="display: none">
-                                11 22 aa bb
+                            <div class="rfid-card-id">
+                                <strong style="display: none">11 22 aa bb</strong>
                             </div>
                             <br/>
                             <div class="">
-                                <button type="button" class="btn btn-default" style="font-size: 18px;">Scan
+                                <button type="button" class="btn btn-default" id="btn-scan-rfid" style="font-size: 18px;">Scan
                                 </button>
                             </div>
                         </div>
                         <div class="overlay">
-                            <i class="fa fa-refresh fa-spin"></i>
+                            <i class="fa fa-refresh fa-spin" style="display: none"></i>
                         </div>
                     </div>
 
@@ -139,6 +139,7 @@
 
 {% block scripts %}
     {% load static %}
+    <script type="text/javascript" src="{% static '/pas/js/plugins/mqtt.min.js' %}"></script>
     <script type="text/javascript" src="{% static '/pas/js/index.js' %}"></script>
-    <script type="text/javascript" src="{% static '/pas/js/plugins/mqttws31.min.js' %}"></script>
+
 {% endblock scripts %}

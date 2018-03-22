@@ -2,7 +2,7 @@
 
 $(document).ready(function () {
     $('#dashboard').click();
-    $.get('http://localhost:8080/rest/items', function (res, status, req) {
+    $.get(OPENHAB_API_ITEMS, function (res, status, req) {
         if (req.getResponseHeader('Content-Type') == 'application/json') {
             $('#number-of-devices-box').html(res.length);
         } else {
@@ -10,37 +10,34 @@ $(document).ready(function () {
         }
     })
 
-    // Create a client instance
-    let client = new Paho.MQTT.Client('localhost', 1883, "pas");
+    let options = {
+        clientId: 'pas',
+        connectTimeout: MQTT_CONNECT_TIMEOUT,
+        hostname: MQTT_HOSTNAME,
+        port: MQTT_PORT,
+        path: MQTT_PATH
+    };
 
-    // set callback handlers
-    client.onConnectionLost = onConnectionLost;
-    client.onMessageArrived = onMessageArrived;
+    let client = mqtt.connect(options);
 
-    console.log(client);
-    // connect the client
-    client.connect({onSuccess: onConnect});
+    client.on('connect', function () {
+        client.subscribe('a');
+        // client.publish('a', 'Hello mqtt')
+    });
 
+    client.on('message', function (topic, message) {
+        console.log(message.toString());
+        $('.add-user-panel').find('div.overlay i').css('display', 'none');
+        $('.add-user-panel').find('div.rfid-card-id strong').css('display', '').html(message.toString());
+        $('#btn-scan-rfid').removeAttr('disabled').html('Re-scan');
+    });
 
-    // called when the client connects
-    function onConnect() {
-        // Once a connection has been made, make a subscription and send a message.
-        console.log("onConnect");
-        client.subscribe("a");
-        let message = new Paho.MQTT.Message("Hello, from PAS");
-        message.destinationName = "World";
-        client.send(message);
-    }
+    $('#btn-scan-rfid').on('click', scan_rfid_card);
 
-    // called when the client loses its connection
-    function onConnectionLost(responseObject) {
-        if (responseObject.errorCode !== 0) {
-            console.log("onConnectionLost:" + responseObject.errorMessage);
-        }
-    }
-
-    // called when a message arrives
-    function onMessageArrived(message) {
-        console.log("onMessageArrived:" + message.payloadString);
-    }
 });
+
+function scan_rfid_card() {
+    $('.add-user-panel').find('div.overlay i').css('display', '');
+    $('.add-user-panel').find('div.rfid-card-id strong').css('display', 'none');
+    $(this).attr('disabled', 'disabled');
+}
