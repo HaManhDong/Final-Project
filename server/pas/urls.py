@@ -7,4 +7,5 @@ urlpatterns = [
     path('devices-info/', views.devices_info, name='devices-info'),
     path('users-info/', views.users_info, name='users-info'),
     path('api/users/', views.users_api, name='api/users'),
+    path('api/upload-image/', views.upload_images, name='api/upload-image'),
 ]
