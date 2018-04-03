@@ -1,10 +1,27 @@
 
 ### **Quick start**
 
-Create tables in database:
+Install requirement package:
 
 ```sh
-$ python manage.py migrate
+$ virtualenv -p python3 venv
+$ . venv/bin/activate
+(venv)$ pip install -U -r requirements.txt
+```
+If have an error when install package `mysqlclient`, the reason is the server miss `libmysqlclient-dev`, try with:
+
+```sh
+sudo apt-get install libmysqlclient-dev
+```
+
+Create PAS database: 
+(MySQL version 5.5.57)
+
+```sh
+mysql> create database pas;
+mysql> GRANT ALL PRIVILEGES ON pas.* to 'pas_admin'@'localhost' IDENTIFIED BY 'pas_admin';
+mysql> GRANT ALL PRIVILEGES ON pas.* to 'pas_admin'@'%' IDENTIFIED BY 'pas_admin';
+mysql> exit;
 ```
 
 Create pas (Persons Authentication System) app:

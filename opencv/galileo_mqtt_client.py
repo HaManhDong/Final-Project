@@ -1,5 +1,5 @@
 import paho.mqtt.client as mqtt
-import faces_detection
+import faces_detection_webcam
 import time
 
 
@@ -15,7 +15,7 @@ def on_connect(client, userdata, flags, rc):
 def on_message(client, userdata, msg):
     print(msg.topic+" - "+str(msg.payload))
     if str(msg.payload) == "start_webcam":
-        faces_detection.main()
+        faces_detection_webcam.main()
         time.sleep(1)
 
 

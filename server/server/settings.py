@@ -26,6 +26,8 @@ SECRET_KEY = 'e4-y(zbxf7(-t^+$+)qvr@%0o6m2aqf1sp3r0!sgd1m5_(w8rp'
 DEBUG = True
 
 ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
     '192.168.1.80',
     '10.42.0.1'
 ]
@@ -80,8 +82,10 @@ WSGI_APPLICATION = 'server.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'pas',
+        'USER': 'pas_admin',
+        'PASSWORD': 'pas_admin'
     }
 }
 

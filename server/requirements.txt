@@ -1,3 +1,5 @@
 Jinja2
 SQLAlchemy
 WTForms
+Pillow
+mysqlclient

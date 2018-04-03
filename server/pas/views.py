@@ -1,12 +1,12 @@
-import os
-
 from django.http import Http404, HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.core.files.images import ImageFile
 from django.core.files.storage import default_storage
-from django.conf import settings
+from django.contrib import messages
 
-from .models import User
+from .member_forms import AddMemberForm
+
+from .models import Member
 
 
 def index(request):
@@ -17,30 +17,58 @@ def devices_info(request):
     return render(request, 'pas/devices.html')
 
 
-def users_info(request):
+def members_info(request):
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = AddMemberForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            u = Member(
+                name=form.data['name'],
+                email=form.data['email'],
+                card_id=form.data['card_id'],
+                course=form.data['course'],
+                research_about=form.data['research_about']
+            )
+            u.save()
+            return redirect(request.path)
+
+    form = AddMemberForm
     try:
-        user_list = User.objects.all()
+        member_list = Member.objects.all()
         context = {
-            'user_list': user_list,
+            'member_list': member_list,
+            'form': form,
         }
-    except User.DoesNotExist:
-        raise Http404("Question does not exist")
-    return render(request, 'pas/users.html', context)
+    except Member.DoesNotExist:
+        raise Http404("Member table does not exist")
+    # messages.success(request, 'Add memeber success!')
+    return render(request, 'pas/member/index.html', context)
 
 
-def users_api(request):
+def members_api(request):
     try:
-        user_list = User.objects.all()
-    except User.DoesNotExist:
-        raise Http404("Question does not exist")
-    return HttpResponse(user_list)
+        member_list = Member.objects.all()
+    except Member.DoesNotExist:
+        raise Http404("Member table does not exist")
+    return HttpResponse(member_list)
 
 
 def upload_images(request):
     if request.method == 'POST':
-        data = request.FILES['face']
-        face = ImageFile(data)
-        path = default_storage.save('tmp/' + str(data), face)
-        os.path.join(settings.BASE_DIR, path)
+        for face_key in request.FILES:
+            data = request.FILES[face_key]
+            face = ImageFile(data)
+            face_path = 'tmp/' + str(data)
+            if default_storage.exists(face_path):
+                default_storage.delete(face_path)
+            default_storage.save(face_path, face)
         return HttpResponse("POST request success")
     return HttpResponse("Upload image success")
+
+
+def member_profile(request):
+    context = {}
+    return render(request, 'pas/member/profile.html', context)
+
+
