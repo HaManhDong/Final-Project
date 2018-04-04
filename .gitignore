@@ -1,5 +1,6 @@
 *.png
 *.jpg
+*.pgm
 haarcascade_frontalface_default.xml
 faces/*
 galileo_venv/*

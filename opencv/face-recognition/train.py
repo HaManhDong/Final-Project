@@ -6,8 +6,8 @@ import numpy as np
 from PIL import Image
 
 
-width_resize = 300
-height_resize = 300
+width_resize = 100
+height_resize = 100
 
 
 def get_images_and_labels(path, faceCascade, sz=None):
@@ -54,7 +54,7 @@ def train(path, recognizer, faceCascade, threshold):
     t = str(threshold).split('.')[0]
     images, labels = get_images_and_labels(path, faceCascade)
     recognizer.train(images, np.array(labels))
-    recognizer.save('./train_2_' + t + '.yml')
+    recognizer.save('./train_' + t + '.yml')
 
 
 if __name__ == '__main__':

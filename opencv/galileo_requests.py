@@ -8,4 +8,5 @@ files = [
     ('face2', open('faces/11.jpg', 'rb')),
 ]
 r = requests.post(url, files=files)
+print r
 # print(os.path.join('/home/donghm/git/final/Final-Project/', 'opencv/faces/'))

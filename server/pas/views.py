@@ -8,6 +8,8 @@ from .member_forms import AddMemberForm
 
 from .models import Member
 
+from . import get_faces_to_train, face_train
+
 
 def index(request):
     return render(request, 'pas/index.html')
@@ -56,6 +58,8 @@ def members_api(request):
 
 def upload_images(request):
     if request.method == 'POST':
+        card_id = request.POST['card_id']
+        member = Member.objects.get(card_id=card_id)
         for face_key in request.FILES:
             data = request.FILES[face_key]
             face = ImageFile(data)
@@ -63,12 +67,31 @@ def upload_images(request):
             if default_storage.exists(face_path):
                 default_storage.delete(face_path)
             default_storage.save(face_path, face)
+
         return HttpResponse("POST request success")
     return HttpResponse("Upload image success")
 
 
 def member_profile(request):
-    context = {}
+    member_email = request.GET['email']
+    try:
+        member = Member.objects.get(email=member_email)
+    except Member.DoesNotExist:
+        raise Http404("Member does not exist")
+    context = {'member': member}
     return render(request, 'pas/member/profile.html', context)
 
+
+def train_face(request):
+    member_email = request.GET['email']
+    member = Member.objects.get(email=member_email)
+    isTrain = request.GET['isTrain']
+    if isTrain and isTrain == "true" and not member.is_train:
+        face_train.train(member.recognize_label)
+        member.is_train = True
+        member.save()
+    else:
+        member_label = member.recognize_label
+        get_faces_to_train.main(member_label)
+    return HttpResponse('success')
 

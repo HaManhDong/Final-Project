@@ -3,3 +3,5 @@ SQLAlchemy
 WTForms
 Pillow
 mysqlclient
+opencv-python
+opencv-contrib-python

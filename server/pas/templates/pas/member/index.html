@@ -57,7 +57,7 @@
                                 <td>{{ u.research_about }}</td>
                                 <td>{{ u.registered_day }}</td>
                                 <td class="actions_column">
-                                    <a id="btn_edit_member" class="btn memberBtn btn-xs btn-info" href="/pas/member-profile/">
+                                    <a id="btn_edit_member" class="btn memberBtn btn-xs btn-info" href="{% url 'member-profile' %}?email={{ u.email }}">
                                         <i class="fa fa-edit"></i>
                                     </a>
                                     <button type="button" id="btn_delete_member" class="btn memberBtn btn-xs btn-danger"

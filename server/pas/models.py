@@ -11,6 +11,7 @@ class Member(models.Model):
     avatar = models.ImageField(null=True)
     recognize_label = models.AutoField(primary_key=True)
     research_about = models.TextField('research', null=True)
+    is_train = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name

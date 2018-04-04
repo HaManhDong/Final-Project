@@ -1,5 +1,7 @@
 'use strict';
 
+let MEMBERS_INFO_API = '/pas/api/members';
+
 $(document).ready(function () {
 
     $('#id_card_id').removeAttr('required').parent().css('display', 'none');
@@ -13,16 +15,12 @@ $(document).ready(function () {
     $('#btn_add_member').appendTo('#btn_add_member_container')
         .css({marginRight: "10px", marginBottom: "15px"});
 
-    $.get('/pas/api/members', function (res, status, req) {
+    $.get(MEMBERS_INFO_API, function (res, status, req) {
         console.log(res);
     });
 
     $('#btn-scan-rfid').on('click', scan_rfid_card);
     submit_new_member_event();
-
-    $('#btn_edit_member').on('click', function () {
-        // alert('ok');
-    })
 });
 
 function scan_rfid_card() {
@@ -60,7 +58,7 @@ function submit_new_member_event() {
     $("#new_member_form").submit(function (event) {
 
         let card_id = $('#id_card_id_temp').text();
-        if(card_id){
+        if (card_id) {
             console.log(card_id);
             $('#id_card_id').val(card_id);
         } else {
