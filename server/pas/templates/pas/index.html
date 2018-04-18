@@ -1,139 +1,147 @@
 {% extends "pas/base.html" %}
 
+{% block styles %}
+    <style type="text/css">
+        .img_timeline {
+            float: left;
+            max-width: 45px;
+            height: auto;;
+            border-radius: 50%;
+            margin-right: 10px;
+            margin-left: 10px;
+            margin-top: -2px;
+        }
+
+        h3.timeline-header span {
+            padding: 2px;
+            color: white;
+            margin-left: 5px;
+        }
+
+        .timeline-item {
+            background-color: beige !important;
+        }
+    </style>
+
+{% endblock styles %}
+
 {% block content-header %}
     <h1 id="content-header-text">
-        International Institute for Computational Science and Engineering LAB
+        HPCC LaB
     </h1>
     <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        {#        <li class="active">Widgets</li>#}
     </ol>
 {% endblock content-header %}
 
 {% block content %}
+    {% load static %}
+    {% load tz %}
     <div class="row">
-        <div class="col-sm-6 col-md-3">
-            <div class="box box-solid">
+        <div class="col-xs-12 col-md-12">
+            <div class="box bg-info text-center">
                 <div class="box-body">
-                    <div class="small-box bg-aqua">
-                        <div class="inner">
-                            <h3>10</h3>
-                            <p>Persons in LAB</p>
-                        </div>
-                        <div class="icon">
-                            <i class="fa fa-users"></i>
-                        </div>
-                        <div class="small-box-footer">now</div>
-                    </div>
+                    <h1 class="font-light text-white">Boss: <span>Present</span></h1>
+                    <h6 class="text-white" style="padding-bottom: 10px;">Master. Nguyen Binh Minh</h6>
                 </div>
             </div>
         </div>
-        <div class="col-sm-6 col-md-3">
-            <div class="box box-solid">
-                <div class="box-body">
-                    <div class="small-box bg-yellow">
-                        <div class="inner">
-                            <h3>2</h3>
-                            <p>Persons can't recognition</p>
-                        </div>
-                        <div class="icon">
-                            <i class="fa fa-warning"></i>
-                        </div>
-                        <div class="small-box-footer">warning</div>
-                    </div>
+        <div class="col-md-2">
+            <div class="small-box bg-aqua" style="background-color: #009efb !important">
+                <div class="inner">
+                    <h3>10</h3>
+                    <p>Persons in LAB</p>
                 </div>
+                <div class="small-box-footer">now</div>
+            </div>
+            <div class="small-box bg-yellow" style="background-color: #FFBC36 !important;">
+                <div class="inner">
+                    <h3>6</h3>
+                    <p>Warning</p>
+                </div>
+                <a href="{% url 'warning' %}" class="small-box-footer">
+                    Detail
+                    <i class="fa fa-arrow-circle-right"></i>
+                </a>
+            </div>
+            <div class="small-box bg-green" style="background-color: #55ce63 !important;">
+                <div class="inner">
+                    <h3 id="number-of-devices-box">0</h3>
+                    <p>Devices</p>
+                </div>
+                <a href="{% url 'devices-info' %}" class="small-box-footer">
+                    More info
+                    <i class="fa fa-arrow-circle-right"></i>
+                </a>
             </div>
         </div>
-        <div class="col-sm-6 col-md-3">
-            <div class="box box-solid">
+        <div class="col-md-10">
+            <div class="box bg-primary">
                 <div class="box-body">
-                    <div class="small-box bg-green">
-                        <div class="inner">
-                            <h3 id="number-of-devices-box">0</h3>
-                            <p>Devices</p>
-                        </div>
-                        <div class="icon">
-                            <i class="fa fa-columns"></i>
-                        </div>
-                        <a href="{% url 'devices-info' %}" class="small-box-footer">
-                            More info
-                            <i class="fa fa-arrow-circle-right"></i>
-                        </a>
-                    </div>
+                    <ul class="timeline">
+                        {% localtime on %}
+                            <!-- timeline time label -->
+                            <li class="time-label">
+                                <span class="bg-red">Today - 12.5.2018</span>
+                            </li>
+                            {% for log in logs %}
+                                {% if log.result_auth %}
+                                    {% if log.is_go_in %}
+                                        <li>
+                                            <img class="img_timeline"
+                                                 src="{{ MEDIA_URL }}{{ log.image }}" alt="Photo">
+
+                                            <div class="timeline-item">
+                                                <span class="time"><i class="fa fa-clock-o"></i> {{ log.time_stamp }}</span>
+                                                <h3 class="timeline-header no-border"><a href="#">{{ log.member.name }}</a>
+                                                    <span class="go_in"> go in  <i
+                                                            class="fa fa-arrow-right"></i></span>
+                                                </h3>
+                                            </div>
+                                        </li>
+                                    {% else %}
+                                        <li>
+                                            <img class="img_timeline"
+                                                 src="{{ MEDIA_URL }}{{ log.image }}" alt="Photo">
+
+                                            <div class="timeline-item">
+                                                <span class="time"><i class="fa fa-clock-o"></i> {{ log.time_stamp }}</span>
+                                                <h3 class="timeline-header"><a href="#">{{ log.member.name }}</a>
+                                                    <span class="go_out">go out <i
+                                                            class="fa fa-arrow-left"></i></span>
+                                                </h3>
+                                            </div>
+                                        </li>
+                                    {% endif %}
+                                {% else %}
+                                    <li>
+                                        <img class="img_timeline"
+                                             src="{{ MEDIA_URL }}{{ log.image }}" alt="Photo">
+                                        <div class="timeline-item">
+                                            <span class="time"><i class="fa fa-clock-o"></i> {{ log.time_stamp }}</span>
+                                            <h3 class="timeline-header"><a href="#">{{ log.member.name }}</a>
+                                                <span class="unknow" data-toggle="tooltip" data-placement="bottom"
+                                                          title="View detail!">
+                                                    {% if log.is_go_in %} go in
+                                                    {% else %} go out
+                                                    {% endif %}
+                                                    <i class="fa fa-close"></i>
+                                                </span>
+                                            </h3>
+                                        </div>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                            <li>
+                                <i class="fa fa-clock-o bg-gray"></i>
+                            </li>
+
+                        {% endlocaltime %}
+                    </ul>
                 </div>
             </div>
         </div>
     </div>
-
-    <div class="row add-user-panel">
-        <div class="box box-solid">
-            <div class="box-body">
-                <h3 style="background-color:#f7f7f7; text-align: center; padding: 7px 10px; margin-top: 0;
-                                   cursor: pointer;">
-                    Add user
-                </h3>
-                <div class="row">
-                    <div class="col-sm-4">
-                        <h4 style="text-align: center;">User info</h4>
-                        <hr>
-                        <form class="form-horizontal">
-                            <div class="box-body">
-                                <div class="form-group">
-                                    <label for="add-user-name" class="col-sm-2 control-label">Name</label>
-
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="add-user-name"
-                                               placeholder="Full Name">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="add-user-email" class="col-sm-2 control-label">Email</label>
-
-                                    <div class="col-sm-10">
-                                        <input type="email" class="form-control" id="add-user-email"
-                                               placeholder="Email">
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- /.box-body -->
-                        </form>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <h4 style="text-align: center;">Scan RFID card</h4>
-                        <hr>
-                        <div style="text-align: center; font-size: 18px;">
-                            <div class="rfid-card-id">
-                                <strong style="display: none">11 22 aa bb</strong>
-                            </div>
-                            <br/>
-                            <div class="">
-                                <button type="button" class="btn btn-default" id="btn-scan-rfid" style="font-size: 18px;">Scan
-                                </button>
-                            </div>
-                        </div>
-                        <div class="overlay">
-                            <i class="fa fa-refresh fa-spin" style="display: none"></i>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <h4 style="text-align: center;">Upload picture</h4>
-                        <hr>
-                        <div class="" style="text-align: center;">
-                            <br/>
-                            <div class="">
-                                <button type="button" class="btn btn-default" style="font-size: 18px;">Upload
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="box-footer" style="text-align: center">
-                <button type="button" class="btn btn-primary">Submit</button>
-            </div>
-        </div>
     </div>
 {% endblock content %}
 

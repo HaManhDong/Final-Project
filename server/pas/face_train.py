@@ -4,11 +4,18 @@
 import cv2, os, sys
 import numpy as np
 
-from server import settings
+from . import const
 
-FACE_CASCADE_PATH = os.path.join(settings.BASE_DIR, 'pas/haarcascade_frontalface_default.xml')
-FACE_TRAIN_FOLDER = os.path.join(settings.BASE_DIR, 'pas/faces_train/')
-EIGENFACES_FOLDER = os.path.join(settings.BASE_DIR, 'pas/eigenfaces/')
+FACE_CASCADE_PATH = const.FACE_CASCADE_PATH
+FACE_TRAIN_FOLDER = const.FACE_TRAIN_FOLDER
+EIGENFACES_FOLDER = const.EIGENFACES_FOLDER
+TEST_FACES_FOLDER_NAME = const.TEST_FACES_FOLDER_NAME
+
+# from server import  settings
+# EIGENFACES_FOLDER = os.path.join(settings.BASE_DIR, 'pas/eigenfaces/')
+# FACE_TRAIN_FOLDER = os.path.join(settings.BASE_DIR, 'pas/faces_train/')
+# FACE_CASCADE_PATH = os.path.join(settings.BASE_DIR, 'pas/haarcascade_frontalface_default.xml')
+# TEST_FACES_FOLDER_NAME = 'test_faces'
 
 NUMBER_COMPONENT = 200
 
@@ -22,28 +29,31 @@ def get_images_and_labels(label, faceCascade):
     labels = []
     count = 0
     for dirname, dirnames, filenames in os.walk(path_faces):
-        for filename in filenames:
-            try:
-                image_path = os.path.join(path_faces, filename)
-                image = cv2.imread(image_path)
-                # cv2.imshow("Training on image...", image)
-                # cv2.waitKey(100)
-                image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-                # faces = faceCascade.detectMultiScale(image)
-                #
-                # if len(faces) == 1:
-                #     count += 1
-                #     images.append(cv2.resize(image, (width_resize, height_resize)))
-                #     labels.append(label)
-                count += 1
-                images.append(cv2.resize(image, (width_resize, height_resize)))
-                labels.append(label)
-            except IOError:
-                print("I/O error({0}): {1}")
-            except:
-                print("Unexpected error:", sys.exc_info()[0])
-                raise
-        print("number image: ", count)
+        if dirname != os.path.join(path_faces, TEST_FACES_FOLDER_NAME) and filenames:
+            print(dirname)
+            for filename in filenames:
+                try:
+                    image_path = os.path.join(dirname, filename)
+                    image = cv2.imread(image_path)
+                    # cv2.imshow("Training on image...", image)
+                    # cv2.waitKey(100)
+                    image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+                    faces = faceCascade.detectMultiScale(image)
+                    #
+                    if len(faces) == 1:
+                        for (x, y, w, h) in faces:
+                            count += 1
+                            images.append(cv2.resize(image[y:y + h, x:x + w], (width_resize, height_resize)))
+                            labels.append(label)
+                            # count += 1
+                            # images.append(cv2.resize(image, (width_resize, height_resize)))
+                            # labels.append(label)
+                except IOError:
+                    print("I/O error({0}): {1}")
+                except:
+                    print("Unexpected error:", sys.exc_info()[0])
+                    raise
+    print("number image trained: ", count)
     return images, labels
 
 
@@ -57,6 +67,5 @@ def train(label):
 
 
 if __name__ == '__main__':
-    path_train = 11
-
+    path_train = 1
     train(path_train)

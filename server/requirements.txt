@@ -5,3 +5,4 @@ Pillow
 mysqlclient
 opencv-python
 opencv-contrib-python
+django-avatar

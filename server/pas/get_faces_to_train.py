@@ -1,18 +1,20 @@
 import cv2
 import os, time
-from server import settings
 
-FOLDER = os.path.join(settings.BASE_DIR, 'pas/faces_train/')
-FACE_CASCADE_PATH = os.path.join(settings.BASE_DIR, 'pas/haarcascade_frontalface_default.xml')
+from . import const
+
+FACE_TRAIN_FOLDER = const.FACE_TRAIN_FOLDER
+FACE_CASCADE_PATH = const.FACE_CASCADE_PATH
 
 
-def main(label):
+def main(label, type):
 
-    sub_folder = FOLDER + str(label) + "/"
+    sub_folder = FACE_TRAIN_FOLDER + str(label) + "/"
     if not os.path.exists(sub_folder):
         os.makedirs(sub_folder)
-
-
+    type_folder = sub_folder + "/" + type
+    if not os.path.exists(type_folder):
+        os.makedirs(type_folder)
 
     face_cascade = cv2.CascadeClassifier(FACE_CASCADE_PATH)
     video_capture = cv2.VideoCapture(0)
@@ -23,7 +25,7 @@ def main(label):
 
     size = 4
     arr_faces = []
-    number_of_faces = 50
+    number_of_faces = 10
 
     while True:
         # capture frame by frame
@@ -36,16 +38,19 @@ def main(label):
             (x, y, w, h) = [v * size for v in faces[0]]
             cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
             # if y and not y in arr_faces:
+            #     print(len(arr_faces))
+            #     sub_face = frame[y:y + h, x:x + w]
+            #     face_file_name = type_folder + "/" + str(10 + len(arr_faces)) + ".jpg"
+            #     cv2.imwrite(face_file_name, sub_face)
+            #     arr_faces.append(y)
             print(len(arr_faces))
             sub_face = frame[y:y + h, x:x + w]
-            FaceFileName = sub_folder + str(10 + len(arr_faces)) + ".jpg"
-            cv2.imwrite(FaceFileName, sub_face)
+            face_file_name = type_folder + "/" + str(10 + len(arr_faces)) + ".jpg"
+            cv2.imwrite(face_file_name, sub_face)
             arr_faces.append(y)
         # display the resulting frame
         # cv2.imshow('Video', frame)
 
-        # enter character 'q' to quit
-        # if cv2.waitKey(1) & 0xFF == ord('q'):
         if cv2.waitKey(1) & 0xFF == ord('q') or len(arr_faces) >= number_of_faces:
             break
 

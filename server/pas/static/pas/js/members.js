@@ -1,26 +1,51 @@
 'use strict';
 
 let MEMBERS_INFO_API = '/pas/api/members';
+let MEMBERS_API = '/pas/members-info/';
 
 $(document).ready(function () {
 
     $('#id_card_id').removeAttr('required').parent().css('display', 'none');
 
     $('#members-info').click();
-
-    $('#pas_datatables_members_info').DataTable({
-        "dom": 'lf<"#btn_add_member_container">rtip'
+    let user_id;
+    let tr_clicking;
+    let table_members = $('#pas_datatables_members_info').DataTable({
+        "dom": 'lf<"#btn_add_member_container">rtip',
+        "drawCallback": function (settings) {
+            $('.btn_delete_member').on('click', function () {
+                user_id = $(this).data()['id'];
+                tr_clicking = $(this).parents('tr');
+                console.log(user_id);
+            });
+        }
     });
     $('#btn_add_member_container').css("float", "right");
     $('#btn_add_member').appendTo('#btn_add_member_container')
         .css({marginRight: "10px", marginBottom: "15px"});
 
-    $.get(MEMBERS_INFO_API, function (res, status, req) {
-        console.log(res);
-    });
+    // $.get(MEMBERS_INFO_API, function (res, status, req) {
+    //     console.log(res);
+    // });
 
     $('#btn-scan-rfid').on('click', scan_rfid_card);
     submit_new_member_event();
+    $('#btn_submit_delete_member').on('click', function () {
+        console.log(user_id);
+        $.post(MEMBERS_API, {id: user_id, action: 'delete'})
+            .done(function (data) {
+                if (data.status === 'success') {
+                    toastr.success(data.message, 'Success');
+                    table_members.row(tr_clicking).remove().draw();
+                }
+                $('#modal-delete-user').modal('toggle');
+            })
+            .fail(function (err) {
+                console.log(err);
+                $('#modal-delete-user').modal('toggle');
+                toastr.error("Have some error when delete this member!", "Fail");
+            })
+    });
 });
 
 function scan_rfid_card() {
@@ -28,7 +53,7 @@ function scan_rfid_card() {
     $('#id_card_id_container').find('div p i').css('display', '');
     $('#id_card_id_temp').css('display', 'none');
     $(this).attr('disabled', 'disabled');
-    $('#btn_submit_new_memeber').attr('disabled', 'disabled');
+    $('#btn_submit_new_member').attr('disabled', 'disabled');
 
     // MQTT client
     let options = {
@@ -49,7 +74,7 @@ function scan_rfid_card() {
         $('#id_card_id_container').find('div p i').css('display', 'none');
         $('#id_card_id_temp').css('display', '').html(message.toString());
         $('#btn-scan-rfid').removeAttr('disabled').html('Re-scan');
-        $('#btn_submit_new_memeber').removeAttr('disabled');
+        $('#btn_submit_new_member').removeAttr('disabled');
         client.end();
     });
 }
@@ -65,5 +90,8 @@ function submit_new_member_event() {
             alert('Miss card ID!');
             event.preventDefault();
         }
+    }).bind('ajax:complete', function () {
+        alert('add user success!');
     });
 }
+

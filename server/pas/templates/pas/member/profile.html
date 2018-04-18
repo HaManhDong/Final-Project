@@ -14,12 +14,16 @@
         .text-muted {
             text-align: center;
         }
+
+        .label-profile {
+            font-weight: 100 !important;
+        }
     </style>
 {% endblock styles %}
 
 {% block content-header %}
     <h1 id="content-header-text">
-        HPCC LaB
+        Member profile
     </h1>
     <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -30,133 +34,242 @@
 {% block content %}
     {% load static %}
     <div class="row">
-        <div class="col-xs-12">
-            <div class="box">
-                <div class="box-header">
-                    <h3 class="box-title">
-                        <strong>{{ member.name }}'s Profile Page</strong>
-                        <i class="fa fa-circle text-success"></i>
-                        {#                        - <i class="fa fa-circle-o"></i>#}
-                    </h3>
-                </div>
+        <div class="col-lg-4 col-xlg-3 col-md-5">
+            <div class="box box-primary">
                 <!-- /.box-header -->
                 <div class="box-body">
-                    <div class="row">
-                        <div class="col-md-3 col-sm-6">
-                            <div class="box box-primary">
-                                <div class="box-header with-border">
-                                    <h3 class="box-title">Avatar </h3>
-                                </div>
-                                <div class="box-body">
-                                    <img class="img-responsive img-circle member_detail_avatar"
-                                         src="{% static "pas/images/HaManhDong.jpg" %}" alt="Photo">
-                                </div>
-                                <div class="box-footer">
-                                    <button class="btn btn-block">Change avatar</button>
-                                </div>
+                    <img class="img-responsive img-circle member_detail_avatar"
+                         src="{% static "pas/images/HaManhDong.jpg" %}" alt="Photo">
+                    <br>
+                    <button class="btn btn-block">Change avatar</button>
+
+                    <hr/>
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label for="member_name" class="label-profile col-sm-5 control-label">
+                                <i class="fa fa-info-circle margin-r-5"></i>Name:</label>
+                            <div class="col-sm-7">
+                                <label id="member_name">{{ member.name }}</label>
                             </div>
-
-
                         </div>
-                        <div class="col-md-6 col-sm-6">
-                            <form class="form-horizontal">
-                                <div class="box box-primary">
-                                    <div class="box-header with-border">
-                                        <h3 class="box-title">General infomation </h3>
-                                    </div>
-                                    <div class="box-body">
-                                        <div class="form-group">
-                                            <label for="member_name" class="col-sm-5 control-label">
-                                                <i class="fa fa-info-circle margin-r-5"></i>Name:</label>
-                                            <div class="col-sm-7">
-                                                <p id="member_name">{{ member.name }}</p>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="inputEmail1" class="col-sm-5 control-label">
-                                                <i class="fa fa-graduation-cap margin-r-5"></i>Course:</label>
-                                            <div class="col-sm-7">
-                                                <p id="inputEmail1">{{ member.course }}</p>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="inputEmail3" class="col-sm-5 control-label">
-                                                <i class="fa fa-envelope margin-r-5"></i>Email:</label>
-                                            <div class="col-sm-7">
-                                                <p id="inputEmail3">{{ member.email }}</p>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="inputPassword3" class="col-sm-5 control-label">
-                                                <i class="fa fa-calendar margin-r-5"></i>Register day:</label>
-                                            <div class="col-sm-7">
-                                                <p id="inputPassword3">{{ member.registered_day }}</p>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="inputPassword4" class="col-sm-5 control-label">
-                                                <i class="fa fa-book margin-r-5"></i>Research about:</label>
-                                            <div class="col-sm-7">
-                                                <p id="inputPassword4">{{ member.research_about }}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
+                        <div class="form-group">
+                            <label for="inputEmail1" class="label-profile col-sm-5 control-label">
+                                <i class="fa fa-graduation-cap margin-r-5"></i>Course:</label>
+                            <div class="col-sm-7">
+                                <label id="inputEmail1">{{ member.course }}</label>
+                            </div>
                         </div>
-                        <div class="col-md-3 col-sm-6">
-                            <div class="box box-primary">
-                                <div class="box-header with-border">
-                                    <h3 class="box-title">Authentication </h3>
-                                </div>
-                                <!-- /.box-header -->
-                                <div class="box-body">
-                                    <strong><i class="fa fa-video-camera margin-r-5"></i> Recognize train</strong>
-                                    {% if member.is_train %}
+                        <div class="form-group">
+                            <label for="inputEmail3" class="label-profile col-sm-5 control-label">
+                                <i class="fa fa-envelope margin-r-5"></i>Email:</label>
+                            <div class="col-sm-7">
+                                <label id="inputEmail3">{{ member.email }}</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputPassword3" class="label-profile col-sm-5 control-label">
+                                <i class="fa fa-calendar margin-r-5"></i>Register day:</label>
+                            <div class="col-sm-7">
+                                <label id="inputPassword3">{{ member.registered_day }}</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputPassword4" class="label-profile col-sm-5 control-label">
+                                <i class="fa fa-book margin-r-5"></i>Research about:</label>
+                            <div class="col-sm-7">
+                                <label id="inputPassword4">{{ member.research_about }}</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputPassword5" class="label-profile col-sm-5 control-label">
+                                <i class="fa fa-smile-o margin-r-5"></i>Recognize label:</label>
+                            <div class="col-sm-7">
+                                <label id="inputPassword5">{{ member.recognize_label }}</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="member_threshold" class="label-profile col-sm-5 control-label">
+                                <i class="fa fa-check-square-o margin-r-5"></i>Threshold:</label>
+                            <div class="col-sm-7">
+                                <label id="member_threshold">{{ member.threshold }}</label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
 
-                                        <p class="text-muted" style="color: green" id="member_train_warning">
-                                            Done!
-                                        </p>
-                                    {% else %}
-                                        <p class="text-muted" style="color: red" id="member_train_warning">
-                                            Did not get faces to train!
-                                        </p>
-                                    {% endif %}
-                                    <div class="btn-group">
-
-                                        <button type="button" class="btn btn-warning" data-toggle="modal"
-                                                data-target="#modal_get_faces">
-                                            Get faces now
-                                        </button>
-                                        <button type="button" class="btn btn-warning" id="btn_get_face1"
-                                                {% if member.is_train %}
-                                                disabled
-                                                {% endif %}
-                                                data-email="{{ member.email }}">Get faces now
-                                        </button>
-                                        <button type="button" class="btn btn-warning" id="btn_train"
-                                                data-email="{{ member.email }}" disabled>Train
-                                        </button>
-                                    </div>
-
-                                    <hr>
-
-                                    <strong><i class="fa fa-credit-card margin-r-5"></i> Card ID</strong>
-
-                                    <p class="text-muted">12 34 AB CD</p>
-                                    <button class="btn btn-default">Change</button>
-
-                                </div>
-                                <!-- /.box-body -->
+            </div>
+            <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
+        <div class="col-lg-8 col-xlg-3 col-md-7">
+            <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#tab_time_line" data-toggle="tab" aria-expanded="false">Time line</a>
+                    </li>
+                    <li class=""><a href="#tab_recognize" data-toggle="tab" aria-expanded="false">Regonize</a></li>
+                    <li class=""><a href="#tab_settings" data-toggle="tab" aria-expanded="true">Settings</a></li>
+                    <li class="pull-right"><a href="#" class="text-muted"><i class="fa fa-gear"></i></a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="tab_time_line">
+                        <div class="table-responsive m-t-40">
+                            <table class="table table-hover v-middle">
+                                <thead>
+                                <tr>
+                                    <th style="width: 60px;"> Member</th>
+                                    <th> Name</th>
+                                    <th> Earnings</th>
+                                    <th> Posts</th>
+                                    <th> Reviews</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        <img class="img-circle" src="{% static "pas/images/HaManhDong.jpg" %}"
+                                             alt="user" width="50"></td>
+                                    <td>
+                                        <a href="javascript:;">Govinda</a>
+                                    </td>
+                                    <td> $325</td>
+                                    <td> 45</td>
+                                    <td>
+                                        <i class="fa fa-star text-warning"></i>
+                                        <i class="fa fa-star text-warning"></i>
+                                        <i class="fa fa-star text-warning"></i>
+                                        <i class="fa fa-star text-warning"></i>
+                                        <i class="fa fa-star-half-full text-warning"></i>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <img class="img-circle" src="../assets/images/users/2.jpg" alt="user"
+                                             width="50"></td>
+                                    <td>
+                                        <a href="javascript:;">Genelia</a>
+                                    </td>
+                                    <td> $225</td>
+                                    <td> 35</td>
+                                    <td>
+                                        <i class="fa fa-star text-warning"></i>
+                                        <i class="fa fa-star text-warning"></i>
+                                        <i class="fa fa-star text-warning"></i>
+                                        <i class="fa fa-star text-warning"></i>
+                                        <i class="fa fa-star-half-full text-warning"></i>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <img class="img-circle" src="../assets/images/users/3.jpg" alt="user"
+                                             width="50"></td>
+                                    <td>
+                                        <a href="javascript:;">Hrithik</a>
+                                    </td>
+                                    <td> $185</td>
+                                    <td> 28</td>
+                                    <td>
+                                        <i class="fa fa-star text-warning"></i>
+                                        <i class="fa fa-star text-warning"></i>
+                                        <i class="fa fa-star text-warning"></i>
+                                        <i class="fa fa-star text-warning"></i>
+                                        <i class="fa fa-star-half-full text-warning"></i>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <img class="img-circle" src="../assets/images/users/4.jpg" alt="user"
+                                             width="50"></td>
+                                    <td>
+                                        <a href="javascript:;">Salman</a>
+                                    </td>
+                                    <td> $125</td>
+                                    <td> 25</td>
+                                    <td>
+                                        <i class="fa fa-star text-warning"></i>
+                                        <i class="fa fa-star text-warning"></i>
+                                        <i class="fa fa-star text-warning"></i>
+                                        <i class="fa fa-star text-warning"></i>
+                                        <i class="fa fa-star-half-full text-warning"></i>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <img class="img-circle" src="../assets/images/users/2.jpg" alt="user"
+                                             width="50"></td>
+                                    <td>
+                                        <a href="javascript:;">Genelia</a>
+                                    </td>
+                                    <td> $225</td>
+                                    <td> 35</td>
+                                    <td>
+                                        <i class="fa fa-star text-warning"></i>
+                                        <i class="fa fa-star text-warning"></i>
+                                        <i class="fa fa-star text-warning"></i>
+                                        <i class="fa fa-star text-warning"></i>
+                                        <i class="fa fa-star-half-full text-warning"></i>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div class="text-center">
+                                <button class="btn btn-success">Check more</button>
                             </div>
                         </div>
                     </div>
+                    <!-- /.tab-pane -->
+                    <div class="tab-pane" id="tab_recognize">
+                        <strong><i class="fa fa-video-camera margin-r-5"></i> Recognize train</strong>
+                        {% if member.is_train %}
+
+                            <p class="text-muted" style="color: green" id="member_train_warning">
+                                Done!
+                            </p>
+                        {% else %}
+                            <p class="text-muted" style="color: red" id="member_train_warning">
+                                Did not get enough faces to train!
+                            </p>
+                        {% endif %}
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-warning" id="btn_get_face"
+                                    data-toggle="modal" data-target="#modal_get_faces"
+                                    {% if member.is_train %}
+                                    disabled
+                                    {% endif %}>
+                                Get faces now
+                            </button>
+                            <button type="button" class="btn btn-warning" id="btn_train"
+                                    data-id="{{ member.id }}"
+                                    {% if member.is_train %}
+                                    disabled
+                                    {% endif %}
+                                    data-loading-text="<i class='fa fa-spinner fa-spin'></i> Training..."
+                                    data-disabled="disabled">
+                                Train
+                            </button>
+                        </div>
+
+                        <hr>
+
+                        <strong><i class="fa fa-credit-card margin-r-5"></i> Card ID</strong>
+
+                        <p class="text-muted">12 34 AB CD</p>
+                        <button class="btn btn-default">Change</button>
+                    </div>
+                    <!-- /.tab-pane -->
+                    <div class="tab-pane" id="tab_settings">
+                        Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
+                        when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+                        It has survived not only five centuries, but also the leap into electronic typesetting,
+                        remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset
+                        sheets containing Lorem Ipsum passages, and more recently with desktop publishing software
+                        like Aldus PageMaker including versions of Lorem Ipsum.
+                    </div>
+                    <!-- /.tab-pane -->
                 </div>
-                <!-- /.box-body -->
+                <!-- /.tab-content -->
             </div>
-            <!-- /.box -->
         </div>
-        <!-- /.col -->
     </div>
 
 
@@ -169,18 +282,25 @@
                     <h4 class="modal-title">Get faces to train</h4>
                 </div>
                 <div class="modal-body">
-                    <ul class="todo-list ui-sortable">
+                    <ul class="todo-list ui-sortable" id="btn_group_get_faces">
                         <li class="">
                             <!-- drag handle -->
                             <span class="handle ui-sortable-handle">
                                 <i class="fa fa-ellipsis-v"></i>
                                 <i class="fa fa-ellipsis-v"></i>
                             </span>
-                            <button type="button" id="btn_delete_member" class="btn btn-xs btn-danger">
-                                <i class="fa fa-trash"></i>
+                            <button type="button" id="normal_faces" class="btn btn-sm btn-danger groupBtnGetFaces"
+                                    {% if normal_faces %}
+                                    disabled
+                                    {% endif %}
+                                    data-id="{{ member.id }}">
+                                <i class="fa fa-picture-o"></i>
                             </button>
-                            <span class="text">Get 10 normal faces</span>
-                            <small class="label label-success"><i class="fa fa-check"></i> Done</small>
+                            <span class="text">Take 10 normal faces</span>
+                            <small class="label label-success"
+                                   style="display: {% if normal_faces %}''{% else %}none{% endif %};">
+                                <i class="fa fa-check"></i> Done
+                            </small>
                         </li>
                         <li class="">
                             <!-- drag handle -->
@@ -188,11 +308,18 @@
                                 <i class="fa fa-ellipsis-v"></i>
                                 <i class="fa fa-ellipsis-v"></i>
                             </span>
-                            <button type="button" id="btn_delete_member" class="btn btn-xs btn-danger">
-                                <i class="fa fa-trash"></i>
+                            <button type="button" id="smile_faces" class="btn btn-sm btn-danger groupBtnGetFaces"
+                                    {% if smile_faces %}
+                                    disabled
+                                    {% endif %}
+                                    data-id="{{ member.id }}">
+                                <i class="fa fa-picture-o"></i>
                             </button>
-                            <span class="text">Get 10 smile faces</span>
-                            <small class="label label-success"><i class="fa fa-check"></i> Done</small>
+                            <span class="text">Take 10 smile faces</span>
+                            <small class="label label-success"
+                                   style="display: {% if smile_faces %}''{% else %}none{% endif %};">
+                                <i class="fa fa-check"></i> Done
+                            </small>
                         </li>
                         <li class="">
                             <!-- drag handle -->
@@ -200,16 +327,65 @@
                                 <i class="fa fa-ellipsis-v"></i>
                                 <i class="fa fa-ellipsis-v"></i>
                             </span>
-                            <button type="button" id="btn_delete_member" class="btn btn-xs btn-danger">
-                                <i class="fa fa-trash"></i>
+                            <button type="button" id="closed_eye_faces" class="btn btn-sm btn-danger groupBtnGetFaces"
+                                    {% if closed_eye_faces %}
+                                    disabled
+                                    {% endif %}
+                                    data-id="{{ member.id }}">
+                                <i class="fa fa-picture-o"></i>
                             </button>
-                            <span class="text">Get 10 normal faces without glass</span>
-                            <small class="label label-success"><i class="fa fa-check"></i> Done</small>
+                            <span class="text">Take 10 closed eye</span>
+                            <small class="label label-success"
+                                   style="display: {% if closed_eye_faces %}''{% else %}none{% endif %};">
+                                <i class="fa fa-check"></i> Done
+                            </small>
+                        </li>
+                        <li class="">
+                            <!-- drag handle -->
+                            <span class="handle ui-sortable-handle">
+                                <i class="fa fa-ellipsis-v"></i>
+                                <i class="fa fa-ellipsis-v"></i>
+                            </span>
+                            <button type="button" id="no_glass_faces" class="btn btn-sm btn-danger groupBtnGetFaces"
+                                    {% if no_glass_faces %}
+                                    disabled
+                                    {% endif %}
+                                    data-id="{{ member.id }}">
+                                <i class="fa fa-picture-o"></i>
+                            </button>
+                            <span class="text">Take 10 normal faces without glass (Optional)</span>
+                            <small class="label label-success"
+                                   style="display: {% if no_glass_faces %}''{% else %}none{% endif %};">
+                                <i class="fa fa-check"></i> Done
+                            </small>
+                        </li>
+
+                        <hr/>
+                        <h4>Get faces to test</h4>
+                        <li class="">
+                            <!-- drag handle -->
+                            <span class="handle ui-sortable-handle">
+                                <i class="fa fa-ellipsis-v"></i>
+                                <i class="fa fa-ellipsis-v"></i>
+                            </span>
+                            <button type="button" id="test_faces" class="btn btn-sm btn-danger groupBtnGetFaces"
+                                    {% if test_faces %}
+                                    disabled
+                                    {% endif %}
+                                    data-id="{{ member.id }}">
+                                <i class="fa fa-picture-o"></i>
+                            </button>
+                            <span class="text">Take 10 faces to test</span>
+                            <small class="label label-success"
+                                   style="display: {% if no_glass_faces %}''{% else %}none{% endif %};">
+                                <i class="fa fa-check"></i> Done
+                            </small>
                         </li>
                     </ul>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary pull-right" data-dismiss="modal">Done</button>
                 </div>
             </div>
             <!-- /.modal-content -->

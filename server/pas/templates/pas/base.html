@@ -21,6 +21,10 @@
     {% block styles %}
     {% endblock styles %}
 
+    <script type="text/javascript" src="{% static '/pas/js/plugins/jquery-3.2.1.min.js' %}"></script>
+    <script type="text/javascript" src="{% static '/pas/js/plugins/toastr.min.js' %}"></script>
+
+
 </head>
 
 <!--<body class="fixed sidebar-mini sidebar-mini-expand-feature skin-black-light">-->
@@ -64,6 +68,15 @@
                         <span>Devices</span>
                     </a>
                 </li>
+                <li class="pas-sidebar-element">
+                    <a href="{% url 'warning' %}" id="warning">
+                        <i class="fa fa-warning" aria-hidden="true"></i>
+                        <span>Warning</span>
+                        <span class="pull-right-container">
+                          <small class="label pull-right bg-yellow">6</small>
+                        </span>
+                    </a>
+                </li>
             </ul>
         </section>
         <!-- /.sidebar -->
@@ -80,19 +93,17 @@
 
         <!-- Main content -->
         <section class="content">
-            <div class="row">
-                {% if messages %}
+            {% if messages %}
+                <script>
                     {% for message in messages %}
-                        <div class="alert alert-{{ message.tags }} alert-dismissible">
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                            {{ message }}
-                        </div>
+                        {% if message.tags == 'success' %}
+                            toastr.success('Success!', '{{ message }}');
+                        {% else %}
+                            toastr.error('Error!', '{{ message }}');
+                        {% endif %}
                     {% endfor %}
-                {% endif %}
-
-            </div>
+                </script>
+            {% endif %}
 
             {% block content %}
             {% endblock %}
@@ -110,7 +121,7 @@
 
 <!-- Script Section -->
 {% load static %}
-<script type="text/javascript" src="{% static '/pas/js/plugins/jquery-3.2.1.min.js' %}"></script>
+{#<script type="text/javascript" src="{% static '/pas/js/plugins/jquery-3.2.1.min.js' %}"></script>#}
 <script type="text/javascript" src="{% static '/pas/js/plugins/select2.min.js' %}"></script>
 <script type="text/javascript" src="{% static '/pas/js/plugins/d3.v3.min.js' %}"></script>
 <script type="text/javascript" src="{% static '/pas/js/plugins/Chart.min.js' %}"></script>
@@ -118,7 +129,7 @@
 <!--datatables script -->
 <script type="text/javascript" src="{% static '/pas/js/plugins/datatables/jquery.dataTables.js' %}"></script>
 <script type="text/javascript" src="{% static '/pas/js/plugins/datatables/dataTables.bootstrap.js' %}"></script>
-<script type="text/javascript" src="{% static '/pas/js/plugins/toastr.min.js' %}"></script>
+{#<script type="text/javascript" src="{% static '/pas/js/plugins/toastr.min.js' %}"></script>#}
 
 <script src="{% static '/pas/bower_components/bootstrap.min.js' %}"></script>
 <script src="{% static '/pas/bower_components/jquery.slimscroll.js' %}"></script>
