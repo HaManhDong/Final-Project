@@ -1,12 +1,14 @@
 import requests
 import os
 
-url = "http://localhost:8000/pas/api/upload-image/"
+url = "http://localhost:8000/pas/api/server-auth/"
 
 files = [
-    ('face1', open('faces/face_10.jpg', 'rb')),
-    ('face2', open('faces/11.jpg', 'rb')),
+    ('16.jpg', open('faces/16.jpg', 'rb')),
+    ('17.jpg', open('faces/17.jpg', 'rb')),
+    ('18.jpg', open('faces/18.jpg', 'rb')),
 ]
-r = requests.post(url, files=files)
+context = {'card_id': '5D 3F FE E9'}
+r = requests.post(url, files=files, data=context)
 print r
 # print(os.path.join('/home/donghm/git/final/Final-Project/', 'opencv/faces/'))

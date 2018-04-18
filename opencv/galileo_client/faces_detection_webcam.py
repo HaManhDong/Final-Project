@@ -1,7 +1,6 @@
 import cv2
 import cv
 
-url = "http://10.42.0.1:8000/pas/api/upload-image/"
 folder = 'faces/pas_face_'
 
 

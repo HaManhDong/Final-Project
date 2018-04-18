@@ -6,7 +6,7 @@ width_resize = 300
 height_resize = 300
 
 image_path = 'test-data/1.jpg'
-label = 1
+label = 4
 
 
 def test_recognition(faceCascade, image_path, label):

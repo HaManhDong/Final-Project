@@ -3,7 +3,7 @@ import faces_detection_webcam
 import time, os, sys
 import requests
 
-url = "http://localhost:8000/pas/api/upload-image/"
+url = "http://10.42.0.1:8000/pas/api/server-auth/"
 MQTT_BROKER_HOST = '10.42.0.1'
 MQTT_PORT = 1883
 MQTT_RFID_TOPIC = 'pas/mqtt/rfid/user_scan'
