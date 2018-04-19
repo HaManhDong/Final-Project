@@ -22,11 +22,10 @@ def recognition(label, is_get_threshold=False):
         walk_folder = TMP_FOLDER
     faceCascade = cv2.CascadeClassifier(FACE_CASCADE_PATH)
     model_path = os.path.join(EIGENFACES_FOLDER, str(label) + ".yml")
-    recognizer = cv2.face.EigenFaceRecognizer_create()
+    recognizer = cv2.face.EigenFaceRecognizer_create(const.NUMBER_COMPONENT)
     recognizer.read(model_path)
 
     result = []
-    count = 0
 
     for dirname, dirnames, filenames in os.walk(walk_folder):
         for filename in filenames:
@@ -37,7 +36,6 @@ def recognition(label, is_get_threshold=False):
                 faces = faceCascade.detectMultiScale(image)
 
                 if len(faces) == 1:
-                    count += 1
                     for (x, y, w, h) in faces:
                         # face_image = cv2.resize(image, (width_resize, height_resize))
                         face_image = cv2.resize(image[y:y + h, x:x + w], (width_resize, height_resize))
@@ -52,16 +50,17 @@ def recognition(label, is_get_threshold=False):
             except:
                 print("Unexpected error:", sys.exc_info()[0])
                 raise
-    print('number of image test to get threshold: {0}'.format(count))
+
     return result
 
 
 def get_threshold(label):
     list_conf = recognition(label, is_get_threshold=True)
+    print('number of image test to get threshold: {0}'.format(len(list_conf)))
     # threshold = sum(list_conf) / len(list_conf)
     threshold = max(list_conf)
     print('threshold - {0}'.format(threshold))
-    return threshold
+    return (threshold, len(list_conf))
 
 
 if __name__ == '__main__':

@@ -38,14 +38,14 @@
     {% load static %}
     {% load tz %}
     <div class="row">
-        <div class="col-xs-12 col-md-12">
-            <div class="box bg-info text-center">
-                <div class="box-body">
-                    <h1 class="font-light text-white">Boss: <span>Present</span></h1>
-                    <h6 class="text-white" style="padding-bottom: 10px;">Master. Nguyen Binh Minh</h6>
-                </div>
-            </div>
-        </div>
+{#        <div class="col-xs-12 col-md-12">#}
+{#            <div class="box bg-info text-center">#}
+{#                <div class="box-body">#}
+{#                    <h1 class="font-light text-white">Boss: <span>Present</span></h1>#}
+{#                    <h6 class="text-white" style="padding-bottom: 10px;">Master. Nguyen Binh Minh</h6>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
         <div class="col-md-2">
             <div class="small-box bg-aqua" style="background-color: #009efb !important">
                 <div class="inner">
@@ -56,7 +56,7 @@
             </div>
             <div class="small-box bg-yellow" style="background-color: #FFBC36 !important;">
                 <div class="inner">
-                    <h3>6</h3>
+                    <h3 id="box_warning_value">0</h3>
                     <p>Warning</p>
                 </div>
                 <a href="{% url 'warning' %}" class="small-box-footer">
@@ -82,7 +82,7 @@
                         {% localtime on %}
                             <!-- timeline time label -->
                             <li class="time-label">
-                                <span class="bg-red">Today - 12.5.2018</span>
+                                <span class="bg-red">Today - 20.4.2018</span>
                             </li>
                             {% for log in logs %}
                                 {% if log.result_auth %}

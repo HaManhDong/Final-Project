@@ -42,6 +42,42 @@
             </a>
 
             <div class="navbar-custom-menu">
+                {% if user.is_authenticated %}
+                    <ul class="nav navbar-nav">
+                        <!-- Messages: style can be found in dropdown.less-->
+                        {% if user.is_superuser %}
+                            <li class="messages-menu">
+                                <a href="{% url 'admin:index' %}">
+                                    <i class="fa fa-cogs"></i> Admin site
+                                </a>
+                            </li>
+                        {% endif %}
+                        <li class="dropdown user user-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                <i class="glyphicon glyphicon-user"></i>
+                                <span> <i class="caret"></i></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <!-- User image -->
+                                <li class="user-header bg-light-blue">
+                                    <img src="/static/img/pgs-160x160.jpg" class="img-circle" alt="User Image">
+                                    <p>
+                                        Admin
+                                    </p>
+                                </li>
+                                <!-- Menu Footer-->
+                                <li class="user-footer">
+                                    <div class="pull-left">
+                                        <a href="#" class="btn btn-default btn-flat">Profile</a>
+                                    </div>
+                                    <div class="pull-right">
+                                        <a href="{% url 'logout' %}" class="btn btn-default btn-flat">Log out</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                {% endif %}
             </div>
         </nav>
     </header>
@@ -56,27 +92,29 @@
                         <span>Dashboard</span>
                     </a>
                 </li>
-                <li class="pas-sidebar-element">
-                    <a href="{% url 'members-info' %}" id="members-info">
-                        <i class="fa fa-users" aria-hidden="true"></i>
-                        <span>Members</span>
-                    </a>
-                </li>
-                <li class="pas-sidebar-element">
-                    <a href="{% url 'devices-info' %}" id="devices-info">
-                        <i class="fa fa-columns" aria-hidden="true"></i>
-                        <span>Devices</span>
-                    </a>
-                </li>
-                <li class="pas-sidebar-element">
-                    <a href="{% url 'warning' %}" id="warning">
-                        <i class="fa fa-warning" aria-hidden="true"></i>
-                        <span>Warning</span>
-                        <span class="pull-right-container">
-                          <small class="label pull-right bg-yellow">6</small>
+                {% if user.is_superuser %}
+                    <li class="pas-sidebar-element">
+                        <a href="{% url 'members-info' %}" id="members-info">
+                            <i class="fa fa-users" aria-hidden="true"></i>
+                            <span>Members</span>
+                        </a>
+                    </li>
+                    <li class="pas-sidebar-element">
+                        <a href="{% url 'devices-info' %}" id="devices-info">
+                            <i class="fa fa-columns" aria-hidden="true"></i>
+                            <span>Devices</span>
+                        </a>
+                    </li>
+                    <li class="pas-sidebar-element">
+                        <a href="{% url 'warning' %}" id="warning_sidebar">
+                            <i class="fa fa-warning" aria-hidden="true"></i>
+                            <span>Warning</span>
+                            <span class="pull-right-container">
+                          <small class="label pull-right bg-yellow">0</small>
                         </span>
-                    </a>
-                </li>
+                        </a>
+                    </li>
+                {% endif %}
             </ul>
         </section>
         <!-- /.sidebar -->
@@ -136,6 +174,27 @@
 <script src="{% static '/pas/bower_components/adminlte.min.js' %}"></script>
 
 <script type="text/javascript" src="{% static '/pas/js/main.js' %}"></script>
+
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            type: "get",
+            url: '/pas/warning',
+            data: {is_get_all: true},
+            success: function (data, text) {
+                if (data.status === 'success') {
+                    $('#warning_sidebar small').html(data.data);
+                } else {
+                    toastr.error('Cannot get number of warning!', 'Fail');
+                }
+            },
+            error: function (request, status, error) {
+                console.log(error);
+                toastr.error('Cannot get number of warning!', 'Fail');
+            }
+        });
+    });
+</script>
 
 {% block scripts %}
 {% endblock scripts %}

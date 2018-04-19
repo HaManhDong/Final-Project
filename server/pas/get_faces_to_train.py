@@ -25,7 +25,7 @@ def main(label, type):
 
     size = 4
     arr_faces = []
-    number_of_faces = 10
+    number_of_faces = 50
 
     while True:
         # capture frame by frame

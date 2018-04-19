@@ -13,3 +13,4 @@ CLOSED_EYE_FACES_FOLDER_NAME = 'closed_eye_faces'
 NO_GLASS_FACES_FOLDER_NAME = 'no_glass_faces'
 TEST_FACES_FOLDER_NAME = 'test_faces'
 
+NUMBER_COMPONENT = 200

@@ -17,7 +17,6 @@ TEST_FACES_FOLDER_NAME = const.TEST_FACES_FOLDER_NAME
 # FACE_CASCADE_PATH = os.path.join(settings.BASE_DIR, 'pas/haarcascade_frontalface_default.xml')
 # TEST_FACES_FOLDER_NAME = 'test_faces'
 
-NUMBER_COMPONENT = 200
 
 width_resize = 100
 height_resize = 100
@@ -27,7 +26,6 @@ def get_images_and_labels(label, faceCascade):
     path_faces = os.path.join(FACE_TRAIN_FOLDER, str(label))
     images = []
     labels = []
-    count = 0
     for dirname, dirnames, filenames in os.walk(path_faces):
         if dirname != os.path.join(path_faces, TEST_FACES_FOLDER_NAME) and filenames:
             print(dirname)
@@ -42,7 +40,6 @@ def get_images_and_labels(label, faceCascade):
                     #
                     if len(faces) == 1:
                         for (x, y, w, h) in faces:
-                            count += 1
                             images.append(cv2.resize(image[y:y + h, x:x + w], (width_resize, height_resize)))
                             labels.append(label)
                             # count += 1
@@ -53,17 +50,18 @@ def get_images_and_labels(label, faceCascade):
                 except:
                     print("Unexpected error:", sys.exc_info()[0])
                     raise
-    print("number image trained: ", count)
     return images, labels
 
 
 def train(label):
     faceCascade = cv2.CascadeClassifier(FACE_CASCADE_PATH)
     images, labels = get_images_and_labels(label, faceCascade)
+    print("number image trained: ", len(images))
 
-    recognizer = cv2.face.EigenFaceRecognizer_create(NUMBER_COMPONENT)
+    recognizer = cv2.face.EigenFaceRecognizer_create(const.NUMBER_COMPONENT)
     recognizer.train(images, np.array(labels))
     recognizer.save(os.path.join(EIGENFACES_FOLDER, str(label) + ".yml"))
+    return len(images)
 
 
 if __name__ == '__main__':

@@ -85,4 +85,23 @@ $(document).ready(function () {
             }
         });
     })
+
+    $('#btn_get_more_calculate_money').on('click', function () {
+        let member_id = $(this).data()['id'];
+        $.ajax({
+            type: "get",
+            url: '/pas/calculate_hour/',
+            data: {id: member_id},
+            success: function (data, text) {
+                if (data.status === 'success') {
+                    toastr.success(data.message, 'Success');
+                    console.log(data);
+                }
+            },
+            error: function (request, status, error) {
+                console.log(error);
+            }
+        });
+    });
+
 });

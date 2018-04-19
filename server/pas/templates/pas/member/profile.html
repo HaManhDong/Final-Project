@@ -39,7 +39,7 @@
                 <!-- /.box-header -->
                 <div class="box-body">
                     <img class="img-responsive img-circle member_detail_avatar"
-                         src="{% static "pas/images/HaManhDong.jpg" %}" alt="Photo">
+                         src="{% static "" %}" alt="Photo">
                     <br>
                     <button class="btn btn-block">Change avatar</button>
 
@@ -104,11 +104,10 @@
         <div class="col-lg-8 col-xlg-3 col-md-7">
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
-                    <li class="active"><a href="#tab_time_line" data-toggle="tab" aria-expanded="false">Time line</a>
+                    <li class="active"><a href="#tab_time_line" data-toggle="tab" aria-expanded="false">Logs</a>
                     </li>
                     <li class=""><a href="#tab_recognize" data-toggle="tab" aria-expanded="false">Regonize</a></li>
                     <li class=""><a href="#tab_settings" data-toggle="tab" aria-expanded="true">Settings</a></li>
-                    <li class="pull-right"><a href="#" class="text-muted"><i class="fa fa-gear"></i></a></li>
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="tab_time_line">
@@ -129,7 +128,7 @@
                                         <img class="img-circle" src="{% static "pas/images/HaManhDong.jpg" %}"
                                              alt="user" width="50"></td>
                                     <td>
-                                        <a href="javascript:;">Govinda</a>
+                                        <a href="javascript:;">Ha Manh Dong</a>
                                     </td>
                                     <td> $325</td>
                                     <td> 45</td>
@@ -212,7 +211,10 @@
                                 </tbody>
                             </table>
                             <div class="text-center">
-                                <button class="btn btn-success">Check more</button>
+                                <button class="btn btn-success" id="btn_get_more_calculate_money"
+                                    data-id="{{ member.id }}">
+                                    Check more
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -252,7 +254,7 @@
 
                         <strong><i class="fa fa-credit-card margin-r-5"></i> Card ID</strong>
 
-                        <p class="text-muted">12 34 AB CD</p>
+                        <p class="text-muted">{{ member.card_id }}</p>
                         <button class="btn btn-default">Change</button>
                     </div>
                     <!-- /.tab-pane -->

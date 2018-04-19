@@ -1,11 +1,12 @@
-from django.urls import path, re_path
+from django.urls import path, re_path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
-from . import views
+from . import views, apis
 
 urlpatterns = [
     path('', views.index, name='index'),
+    # path('accounts/', include('django.contrib.auth.urls')),
     path('devices-info/', views.devices_info, name='devices-info'),
     path('warning/', views.warning, name='warning'),
     path('members-info/', views.members_info, name='members-info'),
@@ -13,4 +14,7 @@ urlpatterns = [
     re_path(r'^member/train/', views.train_face),
     path('api/members/', views.members_api, name='api/members'),
     path('api/server-auth/', views.server_authentication, name='api/server-auth'),
+    path('calculate_hour/', apis.calculate_hour, name='calculate_hour'),
+    path('logout/', views.logout_view, name='logout'),
+    path('login/', views.login_view, name='login'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

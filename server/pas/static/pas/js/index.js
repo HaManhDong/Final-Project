@@ -2,13 +2,23 @@
 
 $(document).ready(function () {
     $('#dashboard').click();
-    // $.get(OPENHAB_API_ITEMS, function (res, status, req) {
-    //     if (req.getResponseHeader('Content-Type') === 'application/json') {
-    //         $('#number-of-devices-box').html(res.length);
-    //     } else {
-    //         $('#number-of-devices-box').html(-1);
-    //     }
-    // })
+
+    $.ajax({
+        type: "get",
+        url: '/pas/warning',
+        data: {is_get_all: true},
+        success: function (data, text) {
+            if (data.status === 'success') {
+                $('#box_warning_value').html(data.data);
+            } else {
+                toastr.error('Cannot get number of warning!', 'Fail');
+            }
+        },
+        error: function (request, status, error) {
+            console.log(error);
+            toastr.error('Cannot get number of warning!', 'Fail');
+        }
+    });
 
 });
 
