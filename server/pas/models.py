@@ -47,3 +47,8 @@ class Logs(models.Model):
     # def __str__(self):
     #     return self.time_stamp
 
+
+class Money(models.Model):
+    member = models.ForeignKey('Member', on_delete=models.CASCADE)
+    total_hour = models.IntegerField('Hour per day', null=False)
+    date = models.DateField(null=False)
