@@ -35,20 +35,22 @@ ALLOWED_HOSTS = [
     '192.168.1.80',
     '10.42.0.1',
     '10.0.0.230',
-    '0.0.0.0'
+    '0.0.0.0',
+    # '192.168.0.103',
+    '192.168.0.101'
 ]
 
 # Application definition
 
 INSTALLED_APPS = [
     'pas.apps.PasConfig',
-    'django.contrib.admin',
+    # 'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'avatar'
+    'djangobower',
 ]
 
 MIDDLEWARE = [
@@ -59,6 +61,15 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+LOGIN_URL = '/pas/login/'
+
+AUTH_USER_MODEL = 'pas.Member'
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'pas.security.pas_authentication_backend'
 ]
 
 ROOT_URLCONF = 'server.urls'
@@ -139,3 +150,15 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+PROJECT_ROOT = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), ".."),
+)
+
+BOWER_COMPONENTS_ROOT = os.path.join(BASE_DIR, 'components')
+
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'djangobower.finders.BowerFinder',
+)

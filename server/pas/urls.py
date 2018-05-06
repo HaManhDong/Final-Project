@@ -12,7 +12,7 @@ urlpatterns = [
     path('members-info/', views.members_info, name='members-info'),
     re_path(r'^member-profile/', views.member_profile, name='member-profile'),
     re_path(r'^member/train/', views.train_face),
-    path('api/members/', views.members_api, name='api/members'),
+    path('api/member/', views.member_api, name='api/member'),
     path('api/server-auth/', views.server_authentication, name='api/server-auth'),
     path('calculate_hour/', apis.calculate_hour, name='calculate_hour'),
     path('logout/', views.logout_view, name='logout'),

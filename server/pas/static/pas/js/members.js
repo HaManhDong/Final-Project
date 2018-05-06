@@ -5,7 +5,14 @@ let MEMBERS_API = '/pas/members-info/';
 
 $(document).ready(function () {
 
-    $('#id_card_id').removeAttr('required').parent().css('display', 'none');
+    let card_id_element = $('#id_card_id');
+    card_id_element.removeAttr('required').parent().css('display', 'none');
+    if(card_id_element.val()){
+        $('#id_card_id_temp').html(card_id_element.val()).css('display','');
+    }
+    $('#id_position').select2({
+        width: '100%'
+    });
 
     $('#members-info').click();
     let user_id;
@@ -38,6 +45,9 @@ $(document).ready(function () {
                     toastr.success(data.message, 'Success');
                     table_members.row(tr_clicking).remove().draw();
                 }
+                else if (data.status === 'fail') {
+                    toastr.error(data.message, 'Fail');
+                }
                 $('#modal-delete-user').modal('toggle');
             })
             .fail(function (err) {
@@ -61,7 +71,6 @@ function scan_rfid_card() {
         connectTimeout: MQTT_CONNECT_TIMEOUT,
         hostname: MQTT_HOSTNAME,
         port: MQTT_PORT,
-        path: MQTT_PATH
     };
 
     let client = mqtt.connect(options);

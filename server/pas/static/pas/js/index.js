@@ -3,6 +3,8 @@
 $(document).ready(function () {
     $('#dashboard').click();
 
+    $('#today_timeline').html(moment().format('L'));
+
     $.ajax({
         type: "get",
         url: '/pas/warning',
@@ -18,6 +20,28 @@ $(document).ready(function () {
             console.log(error);
             toastr.error('Cannot get number of warning!', 'Fail');
         }
+    });
+
+    let client;
+
+    // MQTT client
+    let options = {
+        clientId: 'pas',
+        connectTimeout: MQTT_CONNECT_TIMEOUT,
+        hostname: MQTT_HOSTNAME,
+        port: MQTT_PORT,
+    };
+
+    client = mqtt.connect(options);
+
+    client.on('connect', function () {
+        client.subscribe(MQTT_TOPIC_LATEST_USER_SCAN);
+    });
+
+    client.on('message', function (topic, message) {
+        message = JSON.parse(message);
+        toastr.warning("<strong>" + message.member_name + "</strong> is <strong>" + message.state +
+                    "</strong><br/> Please reload to see!")
     });
 
 });

@@ -24,6 +24,12 @@
     <script type="text/javascript" src="{% static '/pas/js/plugins/jquery-3.2.1.min.js' %}"></script>
     <script type="text/javascript" src="{% static '/pas/js/plugins/toastr.min.js' %}"></script>
 
+    <script>
+        toastr.options.progressBar = true;
+        toastr.options.extendedTimeOut = 3000;
+        toastr.options.closeButton = true;
+    </script>
+
 
 </head>
 
@@ -32,7 +38,7 @@
 <div class="wrapper">
     <header class="main-header">
         <!-- Header Navbar: style can be found in header.less -->
-        <a href="index.html" class="logo">
+        <a href="/pas" class="logo">
             <span class="logo-lg"><b>PAS</b></span>
         </a>
         <nav class="navbar navbar-static-top">
@@ -45,9 +51,9 @@
                 {% if user.is_authenticated %}
                     <ul class="nav navbar-nav">
                         <!-- Messages: style can be found in dropdown.less-->
-                        {% if user.is_superuser %}
+                        {% if user.is_staff %}
                             <li class="messages-menu">
-                                <a href="{% url 'admin:index' %}">
+                                <a href="#">
                                     <i class="fa fa-cogs"></i> Admin site
                                 </a>
                             </li>
@@ -60,15 +66,18 @@
                             <ul class="dropdown-menu">
                                 <!-- User image -->
                                 <li class="user-header bg-light-blue">
-                                    <img src="/static/img/pgs-160x160.jpg" class="img-circle" alt="User Image">
+                                    <img src="
+                                            {{ MEDIA_URL }}{% if user.avatar %}{{ user.avatar }}{% else %}/avatar.png{% endif %}"
+                                         class="img-circle" alt="User Image">
                                     <p>
-                                        Admin
+                                        {{ user.name }}
                                     </p>
                                 </li>
                                 <!-- Menu Footer-->
                                 <li class="user-footer">
                                     <div class="pull-left">
-                                        <a href="#" class="btn btn-default btn-flat">Profile</a>
+                                        <a href="{% url 'member-profile' %}?id={{ user.id }}"
+                                           class="btn btn-default btn-flat">Profile</a>
                                     </div>
                                     <div class="pull-right">
                                         <a href="{% url 'logout' %}" class="btn btn-default btn-flat">Log out</a>
@@ -92,17 +101,11 @@
                         <span>Dashboard</span>
                     </a>
                 </li>
-                {% if user.is_superuser %}
+                {% if user.is_staff %}
                     <li class="pas-sidebar-element">
                         <a href="{% url 'members-info' %}" id="members-info">
                             <i class="fa fa-users" aria-hidden="true"></i>
                             <span>Members</span>
-                        </a>
-                    </li>
-                    <li class="pas-sidebar-element">
-                        <a href="{% url 'devices-info' %}" id="devices-info">
-                            <i class="fa fa-columns" aria-hidden="true"></i>
-                            <span>Devices</span>
                         </a>
                     </li>
                     <li class="pas-sidebar-element">
@@ -112,6 +115,12 @@
                             <span class="pull-right-container">
                           <small class="label pull-right bg-yellow">0</small>
                         </span>
+                        </a>
+                    </li>
+                    <li class="pas-sidebar-element">
+                        <a href="{% url 'devices-info' %}" id="devices-info">
+                            <i class="fa fa-columns" aria-hidden="true"></i>
+                            <span>Devices</span>
                         </a>
                     </li>
                 {% endif %}
@@ -172,6 +181,8 @@
 <script src="{% static '/pas/bower_components/bootstrap.min.js' %}"></script>
 <script src="{% static '/pas/bower_components/jquery.slimscroll.js' %}"></script>
 <script src="{% static '/pas/bower_components/adminlte.min.js' %}"></script>
+
+<script src="{% static '/pas/js/plugins/moment-with-locales.js' %}"></script>
 
 <script type="text/javascript" src="{% static '/pas/js/main.js' %}"></script>
 

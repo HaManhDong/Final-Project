@@ -18,13 +18,18 @@ $(document).ready(function () {
                             toastr.success(data.message, 'Success');
                             warning_table.row(tr).remove().draw();
                         }
-                        $('#modal-delete-user').modal('toggle');
                     })
                     .fail(function (err) {
                         console.log(err);
-                        $('#modal-delete-user').modal('toggle');
                         toastr.error("Have some error when delete this member!", "Fail");
                     })
+            });
+
+            $('.btn_discard_member').on('click', function () {
+                let tr = $(this).parents('tr');
+                toastr.remove();
+                toastr.success('Discard log success!', 'Success');
+                warning_table.row(tr).remove().draw();
             });
         }
     });

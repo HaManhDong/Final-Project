@@ -3,10 +3,11 @@
 let OPENHAB_API_ITEMS = "http://localhost:8080/rest/items";
 
 let MQTT_CONNECT_TIMEOUT = 5000;
-let MQTT_HOSTNAME = "broker.hivemq.com";
-let MQTT_PORT = 8000;
-let MQTT_PATH = "/mqtt";
+let MQTT_HOSTNAME = "localhost";
+let MQTT_PORT = 9001;
+// let MQTT_PATH = "/mqtt";
 let MQTT_TOPIC_USER_REGISTER = "pas/mqtt/rfid/user_register";
+let MQTT_TOPIC_LATEST_USER_SCAN = "pas/mqtt/server/latest_scan";
 
 $('.pas-sidebar-element').each(function (index) {
     $(this).on('click', function () {

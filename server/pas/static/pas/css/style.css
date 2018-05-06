@@ -30,6 +30,9 @@ img {
 }
 
 .go_in {
-    background-color: #55ce63;
+    background-color: #44a75b;
 }
 
+ul.errorlist {
+    color: red;
+}

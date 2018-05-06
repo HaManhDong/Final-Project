@@ -25,12 +25,10 @@ def on_message(client, userdata, msg):
     print(msg.topic + " " + str(msg.payload))
 
 
-def publish(result_auth):
+def publish(topic, payload):
     client = mqtt.Client()
     client.connect(MQTT_HOSTNAME, MQTT_PORT, 60)  # keep alive 60s
-
-    payload = 'OK' if result_auth else 'FAIL'
-    client.publish(PUBLISH_TOPIC, payload)
+    client.publish(topic, payload)
 
 
 def handle_sub_command():

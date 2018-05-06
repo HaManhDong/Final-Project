@@ -1,4 +1,5 @@
 import os, uuid, datetime, pytz, shutil
+import json
 from django.utils import timezone, dateparse
 from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
@@ -7,10 +8,13 @@ from django.core.files.storage import default_storage
 from django.contrib import messages
 
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import logout
+from django.contrib.auth import logout, login
+
+from .security.pas_authentication_backend import PasBackend
 
 from .member_forms import AddMemberForm
-from .models import Member, Logs
+from .models import Member, Logs, Money
+from .security.login_form import LoginForm
 
 from . import get_faces_to_train, face_train, face_recognize, const, \
     mqtt
@@ -18,12 +22,17 @@ from . import get_faces_to_train, face_train, face_recognize, const, \
 from server import settings
 
 
+@login_required()
 def index(request):
     today_min = datetime.datetime.combine(datetime.date.today(), datetime.time.min)
     today_max = datetime.datetime.combine(datetime.date.today(), datetime.time.max)
     logs_for_today = Logs.objects.filter(time_stamp__range=(today_min, today_max))
+
+    members_in_lab = Member.objects.filter(is_in_lab=True)
+
     context = {
-        'logs': logs_for_today
+        'logs': logs_for_today,
+        'members_in_lab': members_in_lab
     }
     return render(request, 'pas/index.html', context)
 
@@ -31,21 +40,39 @@ def index(request):
 def logout_view(request):
     logout(request)
     # Redirect to a success page.
-    return redirect('/')
+    return redirect('/pas/login')
 
 
 def login_view(request):
-    # logout(request)
-    # Redirect to a success page.
-    return render(request, 'pas/login.html')
+    logout(request)
+    if request.method == 'GET':
+        context = {
+            'form': LoginForm
+        }
+        return render(request, 'pas/login.html', context)
+    if request.method == 'POST':
+        email = request.POST['email']
+        password = request.POST['password']
+        user = PasBackend().authenticate(email=email, password=password)
+        if user is not None:
+            user.backend = 'django.contrib.auth.backends.ModelBackend'
+            login(request, user)
+            return redirect('/pas')
+            # return render(request, 'pas/404_error.html')
+        else:
+            http_response = {
+                'status': 'fail',
+                'message': 'Email or password not correct!',
+            }
+            return JsonResponse(http_response)
 
 
-@login_required(login_url='/admin/login/')
+@login_required()
 def devices_info(request):
     return render(request, 'pas/404_error.html')
 
 
-@login_required(login_url='/admin/login/')
+@login_required()
 def warning(request):
     if request.method == 'POST':
         id = request.POST['id']
@@ -64,7 +91,7 @@ def warning(request):
     logs_warning = Logs.objects.filter(result_auth=False).all()
 
     # api to get number of warning to display on side bar
-    if request.GET['is_get_all']:
+    if 'is_get_all' in request.GET:
         http_response = {
             'status': 'success',
             'data': len(logs_warning),
@@ -76,8 +103,9 @@ def warning(request):
     return render(request, 'pas/warning.html', context)
 
 
-@login_required(login_url='/admin/login/')
+@login_required()
 def members_info(request):
+    form = AddMemberForm
     if request.method == 'POST':
         post_data = request.POST
         # edit or delete member
@@ -85,6 +113,13 @@ def members_info(request):
             if post_data['action'] == 'delete':
                 member_id = post_data['id']
                 member = Member.objects.get(id=member_id)
+                if member.email == 'admin@icse.com':
+                    http_response = {
+                        'status': 'fail',
+                        'message': "Can't delete admin!",
+                    }
+                    return JsonResponse(http_response)
+
                 logs = Logs.objects.filter(member_id=member_id)
                 if len(logs):
                     for log in logs:
@@ -125,13 +160,16 @@ def members_info(request):
                     email=form.data['email'],
                     card_id=form.data['card_id'],
                     course=form.data['course'],
-                    research_about=form.data['research_about']
+                    research_about=form.data['research_about'],
+                    coefficient=form.data['coefficient'],
+                    position=form.data['position']
                 )
                 u.save()
                 messages.success(request, 'Add member success!')
                 return redirect(request.path)
+            else:
+                messages.error(request, 'Add user fail. See detail in form!')
 
-    form = AddMemberForm
     try:
         member_list = Member.objects.all()
         context = {
@@ -143,22 +181,34 @@ def members_info(request):
     return render(request, 'pas/member/index.html', context)
 
 
-def members_api(request):
-    try:
-        member_list = Member.objects.all()
-    except Member.DoesNotExist:
-        raise Http404("Member table does not exist")
-    return HttpResponse(member_list)
+@login_required()
+def member_api(request):
+    if request.method == 'POST':
+        if 'type' in request.POST:
+            id = request.POST['id']
+            member = Member.objects.get(id=id)
+            file = request.FILES['img']
+            image_end_code = file.name.split('.')[1]
+            avatar_name = member.name.replace(' ', '_') + "." + image_end_code
+            member.avatar.save(avatar_name, file, save=True)
+            member.save()
+
+            http_response = {
+                'status': 'success',
+                'message': 'Change avatar success!',
+            }
+            return JsonResponse(http_response)
+    return JsonResponse({'status': "ok"})
 
 
 def server_authentication(request):
     if request.method == 'POST':
         card_id = request.POST['card_id']
         member = Member.objects.get(card_id=card_id)
-        last_iamge_name = ''
+        last_image_name = ''
         # save images to /tmp folder
         for face_key in request.FILES:
-            last_iamge_name = face_key
+            last_image_name = face_key
             data = request.FILES[face_key]
             face = ImageFile(data)
             face_path = 'tmp/' + str(data)
@@ -168,26 +218,40 @@ def server_authentication(request):
 
         # get result of predict list images
         list_predicts = face_recognize.recognition(member.recognize_label)
+        # list_predicts = []
         if len(list_predicts):
-            last_iamge_name = list_predicts[0][0]
+            last_image_name = list_predicts[0][0]
 
         # check threshold
         result_auth = False
         f_name = None
         for file_name, conf in list_predicts:
+            print(conf)
             if conf < member.threshold:
                 result_auth = True
                 f_name = file_name
                 break
         # publish result auth to mqtt topic /pas/mqtt/icse/auth
-        mqtt.publish(result_auth)
+        result_auth_payload = 'OK' if result_auth else 'FAIL'
+        mqtt.publish(const.MQTT_AUTH_TOPIC, result_auth_payload)
 
         # get latest logs to check user in or out
         try:
+            # TODO: check last log for new day, not last day
             last_log = Logs.objects.filter(member_id=member.id).latest('time_stamp')
             is_go_in = False if last_log.is_go_in else True
         except Logs.DoesNotExist:
             is_go_in = True
+
+        member.is_in_lab = True if is_go_in else False
+        member.save()
+
+        # publish latest user scan to web browser
+        latest_user_scan_payload = {
+            'member_name': member.name,
+            'state': 'Goes In' if is_go_in else 'Goes Out'
+        }
+        mqtt.publish(const.MQTT_LATEST_USER_SCAN, json.dumps(latest_user_scan_payload))
 
         # save logs
         log = Logs(
@@ -196,17 +260,17 @@ def server_authentication(request):
             result_auth=result_auth,
             is_go_in=is_go_in,
         )
-        f_name = f_name if result_auth else last_iamge_name
+        f_name = f_name if result_auth else last_image_name
         file_path = os.path.join(const.TMP_FOLDER, f_name)
         file_data = File(open(file_path, 'rb'))
         log.image.save(f_name, file_data, save=True)
         log.save()
 
         return HttpResponse("POST request success")
-    return HttpResponse("Upload image success")
+    return HttpResponse("Not valid request type!")
 
 
-@login_required(login_url='/admin/login/')
+@login_required()
 def member_profile(request):
     member_id = request.GET['id']
     try:
@@ -220,8 +284,12 @@ def member_profile(request):
     closed_eye_faces = os.path.exists(label_path + const.CLOSED_EYE_FACES_FOLDER_NAME)
     no_glass_faces = os.path.exists(label_path + const.NO_GLASS_FACES_FOLDER_NAME)
     test_faces = os.path.exists(label_path + const.TEST_FACES_FOLDER_NAME)
+
+    moneys = Money.objects.filter(member_id=member_id)
+
     context = {
         'member': member,
+        'moneys': moneys,
         const.NORMAL_FACES_FOLDER_NAME: normal_faces,
         const.SMILE_FACES_FOLDER_NAME: smile_faces,
         const.CLOSED_EYE_FACES_FOLDER_NAME: closed_eye_faces,
@@ -231,7 +299,7 @@ def member_profile(request):
     return render(request, 'pas/member/profile.html', context)
 
 
-@login_required(login_url='/admin/login/')
+@login_required()
 def train_face(request):
     member_id = request.GET['id']
     member = Member.objects.get(id=member_id)

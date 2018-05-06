@@ -1,6 +1,7 @@
 import datetime
 from django.http import Http404, HttpResponse, JsonResponse
 from django.utils.timezone import now, localtime
+from django.contrib.auth.decorators import login_required
 
 from .models import Member, Logs, Money
 
@@ -9,6 +10,7 @@ def get_warning_number(request):
     pass
 
 
+@login_required()
 def calculate_hour(request):
     member_id = request.GET['id']
     member = Member.objects.get(id=member_id)

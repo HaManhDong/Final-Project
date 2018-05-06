@@ -17,7 +17,7 @@ def main(label, type):
         os.makedirs(type_folder)
 
     face_cascade = cv2.CascadeClassifier(FACE_CASCADE_PATH)
-    video_capture = cv2.VideoCapture(0)
+    video_capture = cv2.VideoCapture(-1)
 
     w,h = 432, 240
     video_capture.set(3, w)

@@ -1,6 +1,7 @@
 'use strict';
 
-let TRAIN_URL = '/pas/member/train';
+let TRAIN_URL = '/pas/member/train/';
+let MEMBER_API = '/pas/api/member/';
 
 $(document).ready(function () {
     $('#members-info').click();
@@ -22,7 +23,7 @@ $(document).ready(function () {
     }
 
     let btn_train = $('#btn_train');
-    if(!btn_train[0].hasAttribute('disabled')){
+    if (!btn_train[0].hasAttribute('disabled')) {
         check_enable_train_btn(btn_group_getfaces);
     }
 
@@ -103,5 +104,44 @@ $(document).ready(function () {
             }
         });
     });
+
+    $('#btn_change_avatar').on('click', function () {
+        $(this).css('display', 'none');
+        $('.change_avatar_container').css('display', '');
+    });
+
+    $('#upload_avatar').change(function (e) {
+        let self = $(this);
+
+        let img_url = URL.createObjectURL(e.target.files[0]);
+        $('#img_member_avatar').attr('src', img_url);
+        let img = e.target.files[0];
+        let data = new FormData();
+        data.append('type', 'upload_avatar');
+        data.append('id', self.data()['id']);
+        data.append('img', img);
+
+        console.log(img);
+        $.ajax({
+            type: "post",
+            contentType: false,
+            processData: false,
+            url: MEMBER_API,
+            data: data,
+            success: function (data, text) {
+                $('.change_avatar_container').css('display', 'none');
+                $('#btn_change_avatar').css('display', '');
+                toastr.success(data.message, 'Success');
+            },
+            error: function (request, status, error) {
+                console.log(error);
+            }
+        });
+    });
+
+    $('#btn_cancel_change_avatar').on('click', function () {
+        $('.change_avatar_container').css('display', 'none');
+        $('#btn_change_avatar').css('display', '');
+    })
 
 });

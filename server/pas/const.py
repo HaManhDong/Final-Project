@@ -1,4 +1,7 @@
 import os
+
+from enum import IntEnum
+
 from server import settings
 
 TMP_FOLDER = os.path.join(settings.BASE_DIR, 'images/tmp/')
@@ -14,3 +17,11 @@ NO_GLASS_FACES_FOLDER_NAME = 'no_glass_faces'
 TEST_FACES_FOLDER_NAME = 'test_faces'
 
 NUMBER_COMPONENT = 200
+
+MQTT_AUTH_TOPIC = "pas/mqtt/icse/auth"
+MQTT_LATEST_USER_SCAN = 'pas/mqtt/server/latest_scan'
+
+
+class MemberType(IntEnum):
+    student = 1
+    teacher = 2
