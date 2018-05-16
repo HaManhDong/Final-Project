@@ -5,6 +5,7 @@ from . import const
 
 FACE_TRAIN_FOLDER = const.FACE_TRAIN_FOLDER
 FACE_CASCADE_PATH = const.FACE_CASCADE_PATH
+TMP_FOLDER = const.TMP_FOLDER
 
 
 def main(label, type):
@@ -62,4 +63,5 @@ def main(label, type):
 
 if __name__ == "__main__":
     print("run main...")
+
     # main(0)

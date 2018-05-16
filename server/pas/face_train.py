@@ -28,7 +28,6 @@ def get_images_and_labels(label, faceCascade):
     labels = []
     for dirname, dirnames, filenames in os.walk(path_faces):
         if dirname != os.path.join(path_faces, TEST_FACES_FOLDER_NAME) and filenames:
-            print(dirname)
             for filename in filenames:
                 try:
                     image_path = os.path.join(dirname, filename)

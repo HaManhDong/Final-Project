@@ -18,6 +18,14 @@
         .label-profile {
             font-weight: 100 !important;
         }
+
+        video {
+            max-width: 100%;
+            border: 5px solid yellow;
+            border-radius: 9px;
+            max-width: 500px;
+            margin: 10px;
+        }
     </style>
 {% endblock styles %}
 
@@ -162,24 +170,35 @@
                     </div>
                     <!-- /.tab-pane -->
                     <div class="tab-pane" id="tab_recognize">
-                        <strong><i class="fa fa-video-camera margin-r-5"></i> Recognize train</strong>
-                        {% if member.is_train %}
+                        <strong><i class="fa fa-video-camera margin-r-5"></i>
+                            Recognize train:
+                            {% if member.is_train %}
+                                <span style="color: green" id="member_train_warning">
+                                    Done!
+                                </span>
+                            {% else %}
+                                <span style="color: red" id="member_train_warning">
+                                    Did not get video to train!
+                                </span>
+                            {% endif %}
+                        </strong>
 
-                            <p class="text-muted" style="color: green" id="member_train_warning">
-                                Done!
-                            </p>
-                        {% else %}
-                            <p class="text-muted" style="color: red" id="member_train_warning">
-                                Did not get enough faces to train!
-                            </p>
-                        {% endif %}
+                        <br/>
+                        <video id="your-video-id" controls="" autoplay=""></video>
+                        <br/>
+
+{#                        <button type="button" id="start_get_video_train" class="btn btn-default"#}
+{#                                data-name="{{ member.name }}" data-id="{{ member.id }}">#}
+{#                            Start video#}
+{#                        </button>#}
+
                         <div class="btn-group">
-                            <button type="button" class="btn btn-warning" id="btn_get_face"
-                                    data-toggle="modal" data-target="#modal_get_faces"
+                            <button type="button" class="btn btn-warning" id="start_get_video_train"
+                                    data-name="{{ member.name }}" data-id="{{ member.id }}"
                                     {% if member.is_train %}
                                     disabled
                                     {% endif %}>
-                                Get faces now
+                                Get video now
                             </button>
                             <button type="button" class="btn btn-warning" id="btn_train"
                                     data-id="{{ member.id }}"
@@ -243,131 +262,12 @@
         </div>
     </div>
 
-
-    <div class="modal fade" id="modal_get_faces" style="display: none;">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span></button>
-                    <h4 class="modal-title">Get faces to train</h4>
-                </div>
-                <div class="modal-body">
-                    <ul class="todo-list ui-sortable" id="btn_group_get_faces">
-                        <li class="">
-                            <!-- drag handle -->
-                            <span class="handle ui-sortable-handle">
-                                <i class="fa fa-ellipsis-v"></i>
-                                <i class="fa fa-ellipsis-v"></i>
-                            </span>
-                            <button type="button" id="normal_faces" class="btn btn-sm btn-danger groupBtnGetFaces"
-                                    {% if normal_faces %}
-                                    disabled
-                                    {% endif %}
-                                    data-id="{{ member.id }}">
-                                <i class="fa fa-picture-o"></i>
-                            </button>
-                            <span class="text">Take 10 normal faces</span>
-                            <small class="label label-success"
-                                   style="display: {% if normal_faces %}''{% else %}none{% endif %};">
-                                <i class="fa fa-check"></i> Done
-                            </small>
-                        </li>
-                        <li class="">
-                            <!-- drag handle -->
-                            <span class="handle ui-sortable-handle">
-                                <i class="fa fa-ellipsis-v"></i>
-                                <i class="fa fa-ellipsis-v"></i>
-                            </span>
-                            <button type="button" id="smile_faces" class="btn btn-sm btn-danger groupBtnGetFaces"
-                                    {% if smile_faces %}
-                                    disabled
-                                    {% endif %}
-                                    data-id="{{ member.id }}">
-                                <i class="fa fa-picture-o"></i>
-                            </button>
-                            <span class="text">Take 10 smile faces</span>
-                            <small class="label label-success"
-                                   style="display: {% if smile_faces %}''{% else %}none{% endif %};">
-                                <i class="fa fa-check"></i> Done
-                            </small>
-                        </li>
-                        <li class="">
-                            <!-- drag handle -->
-                            <span class="handle ui-sortable-handle">
-                                <i class="fa fa-ellipsis-v"></i>
-                                <i class="fa fa-ellipsis-v"></i>
-                            </span>
-                            <button type="button" id="closed_eye_faces" class="btn btn-sm btn-danger groupBtnGetFaces"
-                                    {% if closed_eye_faces %}
-                                    disabled
-                                    {% endif %}
-                                    data-id="{{ member.id }}">
-                                <i class="fa fa-picture-o"></i>
-                            </button>
-                            <span class="text">Take 10 closed eye</span>
-                            <small class="label label-success"
-                                   style="display: {% if closed_eye_faces %}''{% else %}none{% endif %};">
-                                <i class="fa fa-check"></i> Done
-                            </small>
-                        </li>
-                        <li class="">
-                            <!-- drag handle -->
-                            <span class="handle ui-sortable-handle">
-                                <i class="fa fa-ellipsis-v"></i>
-                                <i class="fa fa-ellipsis-v"></i>
-                            </span>
-                            <button type="button" id="no_glass_faces" class="btn btn-sm btn-danger groupBtnGetFaces"
-                                    {% if no_glass_faces %}
-                                    disabled
-                                    {% endif %}
-                                    data-id="{{ member.id }}">
-                                <i class="fa fa-picture-o"></i>
-                            </button>
-                            <span class="text">Take 10 normal faces without glass (Optional)</span>
-                            <small class="label label-success"
-                                   style="display: {% if no_glass_faces %}''{% else %}none{% endif %};">
-                                <i class="fa fa-check"></i> Done
-                            </small>
-                        </li>
-
-                        <hr/>
-                        <h4>Get faces to test</h4>
-                        <li class="">
-                            <!-- drag handle -->
-                            <span class="handle ui-sortable-handle">
-                                <i class="fa fa-ellipsis-v"></i>
-                                <i class="fa fa-ellipsis-v"></i>
-                            </span>
-                            <button type="button" id="test_faces" class="btn btn-sm btn-danger groupBtnGetFaces"
-                                    {% if test_faces %}
-                                    disabled
-                                    {% endif %}
-                                    data-id="{{ member.id }}">
-                                <i class="fa fa-picture-o"></i>
-                            </button>
-                            <span class="text">Take 10 faces to test</span>
-                            <small class="label label-success"
-                                   style="display: {% if no_glass_faces %}''{% else %}none{% endif %};">
-                                <i class="fa fa-check"></i> Done
-                            </small>
-                        </li>
-                    </ul>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary pull-right" data-dismiss="modal">Done</button>
-                </div>
-            </div>
-            <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-    </div>
-
 {% endblock content %}
 
 {% block scripts %}
     {% load static %}
+    <script type="text/javascript" src="{% static '/pas/bower_components/recordrtc/RecordRTC.min.js' %}"></script>
     <script type="text/javascript" src="{% static '/pas/js/plugins/mqtt.min.js' %}"></script>
     <script type="text/javascript" src="{% static '/pas/js/profile.js' %}"></script>
+
 {% endblock scripts %}

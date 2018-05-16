@@ -17,7 +17,7 @@ from .models import Member, Logs, Money
 from .security.login_form import LoginForm
 
 from . import get_faces_to_train, face_train, face_recognize, const, \
-    mqtt
+    mqtt, face_detection
 
 from server import settings
 
@@ -277,24 +277,11 @@ def member_profile(request):
         member = Member.objects.get(id=member_id)
     except Member.DoesNotExist:
         raise Http404("Member does not exist")
-    label = member.recognize_label
-    label_path = const.FACE_TRAIN_FOLDER + str(label) + "/"
-    normal_faces = os.path.exists(label_path + const.NORMAL_FACES_FOLDER_NAME)
-    smile_faces = os.path.exists(label_path + const.SMILE_FACES_FOLDER_NAME)
-    closed_eye_faces = os.path.exists(label_path + const.CLOSED_EYE_FACES_FOLDER_NAME)
-    no_glass_faces = os.path.exists(label_path + const.NO_GLASS_FACES_FOLDER_NAME)
-    test_faces = os.path.exists(label_path + const.TEST_FACES_FOLDER_NAME)
-
     moneys = Money.objects.filter(member_id=member_id)
 
     context = {
         'member': member,
         'moneys': moneys,
-        const.NORMAL_FACES_FOLDER_NAME: normal_faces,
-        const.SMILE_FACES_FOLDER_NAME: smile_faces,
-        const.CLOSED_EYE_FACES_FOLDER_NAME: closed_eye_faces,
-        const.NO_GLASS_FACES_FOLDER_NAME: no_glass_faces,
-        const.TEST_FACES_FOLDER_NAME: test_faces
     }
     return render(request, 'pas/member/profile.html', context)
 
@@ -305,26 +292,32 @@ def train_face(request):
     member = Member.objects.get(id=member_id)
     isTrain = request.GET['isTrain']
     if isTrain and isTrain == "true":
-        if not member.is_train:
-            label = member.recognize_label
-            images_trained = face_train.train(label)
-            get_threshold = face_recognize.get_threshold(label)
-            threshold = int(get_threshold[0])
-            member.is_train = True
-            member.threshold = threshold
-            member.save()
-            http_response = {
-                'status': 'success',
-                'message': 'Training success with {0} images -- '
-                           'Get threshold success with {1} images'.format(images_trained, get_threshold[1]),
-                'threshold': threshold,
-            }
+        number_of_faces = face_detection.face_detect(member.recognize_label)
+        http_response = {
+            'status': 'warning',
+            'message': 'This member was had file train! - {0}'.format(number_of_faces)
+        }
 
-        else:
-            http_response = {
-                'status': 'warning',
-                'message': 'This member was had file train!'
-            }
+        # if not member.is_train:
+        #     label = member.recognize_label
+        #     images_trained = face_train.train(label)
+        #     get_threshold = face_recognize.get_threshold(label)
+        #     threshold = int(get_threshold[0])
+        #     member.is_train = True
+        #     member.threshold = threshold
+        #     member.save()
+        #     http_response = {
+        #         'status': 'success',
+        #         'message': 'Training success with {0} images -- '
+        #                    'Get threshold success with {1} images'.format(images_trained, get_threshold[1]),
+        #         'threshold': threshold,
+        #     }
+        #
+        # else:
+        #     http_response = {
+        #         'status': 'warning',
+        #         'message': 'This member was had file train!'
+        #     }
     else:
         member_label = member.recognize_label
         face_type = request.GET['type']
@@ -334,3 +327,28 @@ def train_face(request):
             'message': 'Have taken enough 50 faces image!'
         }
     return JsonResponse(http_response)
+
+
+@login_required()
+def upload_video(request):
+    if request.method == 'POST':
+        id = request.POST['id']
+        member = Member.objects.get(id=id)
+        label = member.recognize_label
+        video_data = request.FILES['video-train']
+        video = ImageFile(video_data)
+        video_name = request.POST['video-filename']
+        video_path = 'video/' + str(label) + "/" + video_name
+        if default_storage.exists(video_path):
+            default_storage.delete(video_path)
+        default_storage.save(video_path, video)
+
+        number_of_faces = 1
+
+
+        http_response = {
+            'status': 'success',
+            'message': 'Get {0} images'.format(number_of_faces)
+        }
+
+        return JsonResponse(http_response)

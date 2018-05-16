@@ -1,13 +1,14 @@
 *.png
 *.jpg
 *.pgm
+*.mp4
+*.webm
 haarcascade_frontalface_default.xml
 faces/*
 galileo_venv/*
 
 *.yml
 tmp/*
-
 
 
 # Byte-compiled / optimized / DLL files

@@ -7,7 +7,7 @@ folder = 'faces/pas_face_'
 def main():
 
     face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
-    video_capture = cv2.VideoCapture(0)
+    video_capture = cv2.VideoCapture(-1)
 
     w,h = 432, 240
     video_capture.set(cv.CV_CAP_PROP_FRAME_WIDTH, w)

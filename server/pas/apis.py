@@ -6,8 +6,9 @@ from django.contrib.auth.decorators import login_required
 from .models import Member, Logs, Money
 
 
-def get_warning_number(request):
-    pass
+def test(request):
+
+    return JsonResponse({'ok': 'ok'})
 
 
 @login_required()

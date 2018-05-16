@@ -57,42 +57,6 @@
     {% load static %}
     {% load tz %}
 
-    <video autoplay></video>
-
-    <button type="btn" id="btn_get_video" class="btn btn-default">Get video</button>
-    <button type="btn" id="btn_stop_video" class="btn btn-default">Stop video</button>
-
-    <script>
-        const video = document.querySelector('video');
-        $('#btn_get_video').on('click', function () {
-            const constraints = {
-                video: true
-            };
-
-            function handleSuccess(stream) {
-                video.srcObject = stream;
-            }
-
-            function handleError(error) {
-                console.error('Reeeejected!', error);
-            }
-
-            navigator.mediaDevices.getUserMedia(constraints).then(handleSuccess).catch(handleError);
-        });
-
-        $('#btn_stop_video').on('click', function () {
-            let stream = video.srcObject;
-            let tracks = stream.getTracks();
-
-            tracks.forEach(function (track) {
-                track.stop();
-            });
-
-            video.srcObject = null;
-        });
-
-    </script>
-
     <div class="row">
         <div class="col-md-4">
             <div class="info-box bg-yellow">
@@ -100,7 +64,7 @@
 
                 <div class="info-box-content">
                     <span class="info-box-text">Warning</span>
-                    <span class="info-box-number" id="box_warning_value">0</span>
+                    <span class="info-box-number" id="box_warning_value">1</span>
 
                     <div class="progress">
                         <div class="progress-bar" style="width: 100%"></div>
@@ -127,14 +91,14 @@
                     <ul class="users-list clearfix">
                         {% for m in members_in_lab %}
                             <li>
-                                <img src="
-                                        {{ MEDIA_URL }}{% if m.avatar %}{{ m.avatar }}{% else %}/avatar.png{% endif %}"
+                                <img src="{{ MEDIA_URL }}{% if m.avatar %}{{ m.avatar }}{% else %}/avatar.png{% endif %}"
                                      alt="User Image">
                                 <a class="users-list-name" href="{% url 'member-profile' %}?id={{ m.id }}"
                                    data-toggle="tooltip" data-placement="bottom"
                                    title="{{ m.name }}">{{ m.name }}</a>
                             </li>
                         {% endfor %}
+
                     </ul>
                     <!-- /.users-list -->
                 </div>
@@ -208,6 +172,7 @@
                                     </li>
                                 {% endif %}
                             {% endfor %}
+
                             <li>
                                 <i class="fa fa-clock-o bg-gray"></i>
                             </li>
@@ -217,7 +182,6 @@
                 </div>
             </div>
         </div>
-    </div>
     </div>
 {% endblock content %}
 
