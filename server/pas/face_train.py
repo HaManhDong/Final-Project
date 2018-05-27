@@ -23,7 +23,7 @@ height_resize = 100
 
 
 def get_images_and_labels(label, faceCascade):
-    path_faces = os.path.join(FACE_TRAIN_FOLDER, str(label))
+    path_faces = os.path.join(FACE_TRAIN_FOLDER, str(label), const.TRAIN_FACES_FOLDER_NAME)
     images = []
     labels = []
     for dirname, dirnames, filenames in os.walk(path_faces):
@@ -32,8 +32,6 @@ def get_images_and_labels(label, faceCascade):
                 try:
                     image_path = os.path.join(dirname, filename)
                     image = cv2.imread(image_path)
-                    # cv2.imshow("Training on image...", image)
-                    # cv2.waitKey(100)
                     image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
                     faces = faceCascade.detectMultiScale(image)
                     #
@@ -41,9 +39,6 @@ def get_images_and_labels(label, faceCascade):
                         for (x, y, w, h) in faces:
                             images.append(cv2.resize(image[y:y + h, x:x + w], (width_resize, height_resize)))
                             labels.append(label)
-                            # count += 1
-                            # images.append(cv2.resize(image, (width_resize, height_resize)))
-                            # labels.append(label)
                 except IOError:
                     print("I/O error({0}): {1}")
                 except:

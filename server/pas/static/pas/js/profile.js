@@ -2,10 +2,57 @@
 
 let TRAIN_URL = '/pas/member/train/';
 let MEMBER_API = '/pas/api/member/';
-let VIDEO_TIME = 5;
+let VIDEO_TIME = 15;
 
 $(document).ready(function () {
     $('#members-info').click();
+
+    // moment.locale('vi');
+
+    let d = new Date();
+    let today_unix = parseInt(Math.round((d).getTime() / 1000));
+    let seven_days_ago = d.setDate(d.getDate() - 7);
+    seven_days_ago = parseInt(seven_days_ago / 1000);
+
+    let member_uuid = $('#btn_change_avatar').data()['id'];
+    $.ajax({
+        type: "get",
+        url: 'http://192.168.60.82:9090/get_salary_in_period',
+        data: {
+            id: member_uuid.toString(),
+            started_date: seven_days_ago.toString(),
+            ended_date: today_unix.toString()
+        },
+        // crossDomain: true,
+        headers: {
+            'Access-Control-Allow-Origin': '*'
+        },
+        success: function (data, text) {
+            console.log(data);
+            if (data.status === 'SUCCESS') {
+                let salaries = data.result;
+                let rows = '';
+                for(let i =0;i<salaries.length;i++){
+                    let day = moment.unix(salaries[i].unix_time).format('DD/MM/YYYY');
+                    rows += ' <tr>' +
+                        '<td>' + day + '</td>' +
+                        '<td>' + salaries[i].work_time + '</td>' +
+                        '<td>' + salaries[i].day_salary + '</td>' +
+                        '<td><i class="fa fa-star text-warning"></i>' +
+                            '<i class="fa fa-star text-warning"></i>' +
+                            '<i class="fa fa-star text-warning"></i>' +
+                            '<i class="fa fa-star text-warning"></i>' +
+                            '<i class="fa fa-star-half-full text-warning"></i>' +
+                        '</td>' +
+                    '</tr>';
+                }
+                $('#table_time_line tr:last').after(rows);
+            }
+        },
+        error: function (request, status, error) {
+            console.log(error);
+        }
+    });
 
     $('#start_get_video_train').on('click', function () {
 
@@ -69,6 +116,8 @@ $(document).ready(function () {
                         processData: false,
                         type: 'POST',
                         success: function (response) {
+                            console.log('out put of post video');
+                            console.log(response);
                             if (response === 'success') {
                                 console.log('ok');
                             } else {

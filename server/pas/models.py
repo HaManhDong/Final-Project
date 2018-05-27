@@ -39,6 +39,8 @@ class Member(AbstractBaseUser):
     is_in_lab = models.BooleanField(default=False,null=False)
     coefficient = models.IntegerField('coefficients salary', default=1)
     password = models.CharField('password', default='password', max_length=20)
+    is_enough_images = models.BooleanField(default=False)
+    is_added_to_blockchain = models.BooleanField(default=False)
 
     objects = MyMemberManager()
 

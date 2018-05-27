@@ -1,5 +1,6 @@
 import os, uuid, datetime, pytz, shutil
 import json
+import requests
 from django.utils import timezone, dateparse
 from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
@@ -80,8 +81,9 @@ def warning(request):
         time_stamp = dateparse.parse_datetime(request.POST['time_stamp'])
         tz = pytz.timezone(settings.TIME_ZONE).localize(time_stamp)
         log = Logs.objects.get(member_id=id, time_stamp=tz)
-        log.image.delete(save=True)
-        log.delete()
+        # log.image.delete(save=True)
+        log.result_auth = True
+        log.save()
 
         http_response = {
             'status': 'success',
@@ -139,11 +141,20 @@ def members_info(request):
                     os.remove(eigenface_model_path)
 
                 member.delete()
-
+                del_url = const.BC_SERVER + const.BC_API_DEL_USER
+                data = {
+                    'id': str(member.id)
+                }
+                r = requests.post(del_url, json=data)
+                result = r.json()
                 http_response = {
                     'status': 'success',
-                    'message': 'Delete member success!',
+                    'message': 'Delete member success on PAS !',
                 }
+                if result['status'] == 'SUCCESS':
+                    http_response['message'] = 'Delete member success on PAS and Blockchain server'
+                else:
+                    messages.error(request, result['message'])
                 return JsonResponse(http_response)
             elif post_data['action'] == 'edit':
                 pass
@@ -165,7 +176,23 @@ def members_info(request):
                     position=form.data['position']
                 )
                 u.save()
-                messages.success(request, 'Add member success!')
+
+                url = const.BC_SERVER + const.BC_API_ADD_USER
+                data = {
+                    'id': str(member_uuid),
+                    'rfid': form.data['card_id'],
+                    'username': form.data['name']
+                }
+                r = requests.post(url, json=data)
+
+                result = r.json()
+                if result['status'] == 'SUCCESS':
+                    u.is_added_to_blockchain = True
+                    u.save()
+                else:
+                    messages.error(request, result['message'])
+
+                messages.success(request, 'Add member success to PAS!')
                 return redirect(request.path)
             else:
                 messages.error(request, 'Add user fail. See detail in form!')
@@ -292,27 +319,23 @@ def train_face(request):
     member = Member.objects.get(id=member_id)
     isTrain = request.GET['isTrain']
     if isTrain and isTrain == "true":
-        number_of_faces = face_detection.face_detect(member.recognize_label)
-        http_response = {
-            'status': 'warning',
-            'message': 'This member was had file train! - {0}'.format(number_of_faces)
-        }
-
         # if not member.is_train:
-        #     label = member.recognize_label
-        #     images_trained = face_train.train(label)
-        #     get_threshold = face_recognize.get_threshold(label)
-        #     threshold = int(get_threshold[0])
-        #     member.is_train = True
-        #     member.threshold = threshold
-        #     member.save()
-        #     http_response = {
-        #         'status': 'success',
-        #         'message': 'Training success with {0} images -- '
-        #                    'Get threshold success with {1} images'.format(images_trained, get_threshold[1]),
-        #         'threshold': threshold,
-        #     }
-        #
+
+
+            label = member.recognize_label
+            images_trained = face_train.train(label)
+            get_threshold = face_recognize.get_threshold(label)
+            threshold = int(get_threshold[0])
+            member.is_train = True
+            member.threshold = threshold
+            member.save()
+            http_response = {
+                'status': 'success',
+                'message': 'Training success with {0} images -- '
+                           'Get threshold success with {1} images'.format(images_trained, get_threshold[1]),
+                'threshold': threshold,
+            }
+
         # else:
         #     http_response = {
         #         'status': 'warning',
@@ -343,12 +366,17 @@ def upload_video(request):
             default_storage.delete(video_path)
         default_storage.save(video_path, video)
 
-        number_of_faces = 1
+        number_of_faces = face_detection.face_detect(member.recognize_label)
 
-
-        http_response = {
-            'status': 'success',
-            'message': 'Get {0} images'.format(number_of_faces)
-        }
+        if number_of_faces > 150:
+            http_response = {
+                'status': 'success',
+                'message': 'Get enough {0} images'.format(number_of_faces)
+            }
+        else:
+            http_response = {
+                'status': 'warning',
+                'message': 'Get {0} images, please add more video!'.format(number_of_faces)
+            }
 
         return JsonResponse(http_response)

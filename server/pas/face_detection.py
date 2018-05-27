@@ -10,6 +10,13 @@ def face_detect(label):
     face_cascade = cv2.CascadeClassifier(const.FACE_CASCADE_PATH)
     number_of_faces = 1
 
+    folder_test = os.path.join(const.FACE_TRAIN_FOLDER, str(label), const.TEST_FACES_FOLDER_NAME)
+    if not os.path.exists(folder_test):
+        os.makedirs(folder_test)
+    folder_train = os.path.join(const.FACE_TRAIN_FOLDER, str(label), const.TRAIN_FACES_FOLDER_NAME)
+    if not os.path.exists(folder_train):
+        os.makedirs(folder_train)
+
     for dirname, dirnames, filenames in os.walk(video_path):
         for filename in filenames:
             video = os.path.join(dirname, filename)
@@ -35,9 +42,9 @@ def face_detect(label):
                         (x, y, w, h) = [v * size for v in faces[0]]
                         sub_face = frame[y:y + h, x:x + w]
                         if number_of_faces < 40:
-                            folder = os.path.join(const.FACE_TRAIN_FOLDER, str(label), const.TEST_FACES_FOLDER_NAME)
+                            folder = folder_test
                         else:
-                            folder = os.path.join(const.FACE_TRAIN_FOLDER, str(label), const.TRAIN_FACES_FOLDER_NAME)
+                            folder = folder_train
                         FaceFileName = folder + str(10 + number_of_faces) + ".jpg"
                         cv2.imwrite(FaceFileName, sub_face)
                         number_of_faces += 1
