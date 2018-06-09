@@ -41,6 +41,7 @@ class Member(AbstractBaseUser):
     password = models.CharField('password', default='password', max_length=20)
     is_enough_images = models.BooleanField(default=False)
     is_added_to_blockchain = models.BooleanField(default=False)
+    number_of_train_images = models.IntegerField(default=0)
 
     objects = MyMemberManager()
 

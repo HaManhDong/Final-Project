@@ -13,6 +13,7 @@ urlpatterns = [
     re_path(r'^member-profile/', views.member_profile, name='member-profile'),
     re_path(r'^member/train/', views.train_face),
     path('api/member/', views.member_api, name='api/member'),
+    path('api/change-card-id/', views.change_card_id, name='api/change-card-id'),
     path('api/upload_video/', views.upload_video, name='api/upload_video'),
     path('api/server-auth/', views.server_authentication, name='api/server-auth'),
     path('calculate_hour/', apis.calculate_hour, name='calculate_hour'),
@@ -20,8 +21,5 @@ urlpatterns = [
     path('login/', views.login_view, name='login'),
 
     path('test/', apis.test),
-
-    path('server_info/', apis.server_api),
-    path('show_database/', apis.show_database)
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

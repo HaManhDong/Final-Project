@@ -33,12 +33,16 @@ def get_images_and_labels(label, faceCascade):
                     image_path = os.path.join(dirname, filename)
                     image = cv2.imread(image_path)
                     image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-                    faces = faceCascade.detectMultiScale(image)
-                    #
-                    if len(faces) == 1:
-                        for (x, y, w, h) in faces:
-                            images.append(cv2.resize(image[y:y + h, x:x + w], (width_resize, height_resize)))
-                            labels.append(label)
+
+                    images.append(cv2.resize(image, (width_resize, height_resize)))
+                    labels.append(label)
+
+                    # faces = faceCascade.detectMultiScale(image)
+                    # #
+                    # if len(faces) == 1:
+                    #     for (x, y, w, h) in faces:
+                    #         images.append(cv2.resize(image[y:y + h, x:x + w], (width_resize, height_resize)))
+                    #         labels.append(label)
                 except IOError:
                     print("I/O error({0}): {1}")
                 except:

@@ -148,7 +148,7 @@
                                     <tr>
                                         <td>{{ m.date|date:"d-m-Y" }}</td>
                                         <td>{{ m.total_hour }}</td>
-                                        <td> $325</td>
+                                        <td> $100</td>
                                         <td>
                                             <i class="fa fa-star text-warning"></i>
                                             <i class="fa fa-star text-warning"></i>
@@ -215,8 +215,13 @@
 
                         <strong><i class="fa fa-credit-card margin-r-5"></i> Card ID</strong>
 
-                        <p class="text-muted">{{ member.card_id }}</p>
-                        <button class="btn btn-default">Change</button>
+                        <p class="text-muted" id="card-id">{{ member.card_id }}</p>
+                        <button class="btn btn-primary" id="btn-save-change-card" style="display: none;">Save</button>
+                        <button class="btn btn-default" id="btn-cancel-change-card" style="display: none;">Cancel</button>
+                        <button class="btn btn-default" id="btn-change-card"
+                                data-loading-text="<i class='fa fa-spinner fa-spin'></i> Waiting card id...">
+                            Change
+                        </button>
                     </div>
                     <!-- /.tab-pane -->
                     <div class="tab-pane" id="tab_settings">

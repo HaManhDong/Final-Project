@@ -29,40 +29,35 @@ def calculate_hour(request):
                     if log.is_go_in:
                         start_time = log.time_stamp
                     else:
-                        # TODO: check start_time
+                        # check start_time
                         if total_hour:
                             total_hour += log.time_stamp - start_time
                         else:
                             total_hour = log.time_stamp - start_time
                         start_time = None
-            # if total_hour:
-            #
-            #     hour_convert = divmod(total_hour.days * 86400 + total_hour.seconds, 60)
-            #
-            #     local_today = localtime(now()).date()
-            #     money = Money(member=member,total_hour=hour_convert[0],date=local_today)
-            #     money.save()
-            #
-            #     today_unix_time = time.mktime(datetime.date.today().timetuple())
-            #     today_unix_time = int(today_unix_time)
-            #     data_send_to_BC.append(
-            #         {'id': member.id, 'work_time': hour_convert, 'unix_time': today_unix_time}
-            #     )
-            today_unix_time = time.time()
-            # today_unix_time = time.mktime(datetime.date.today().timetuple())
-            today_unix_time = int(today_unix_time)
-            hour_convert = 8
-            data_send_to_BC.append(
-                {'id': str(member.id), 'work_time': str(hour_convert), 'unix_time': str(today_unix_time)}
-            )
+                if total_hour:
 
-    if data_send_to_BC:
-        data = {
-            'data': data_send_to_BC
-        }
-        calculate_salary_url = const.BC_SERVER + const.BC_API_CALCULATE_SALARY_USER
-        r = requests.post(calculate_salary_url, json=data)
-        result = r.json()
+                    hour_convert = divmod(total_hour.days * 86400 + total_hour.seconds, 60)
+
+                    local_today = localtime(now()).date()
+                    money = Money(member=member,total_hour=hour_convert[0],date=local_today)
+                    money.save()
+
+            #         TODO: Remove commend to enable request to Blockchain
+            # today_unix_time = time.time()
+            # # today_unix_time = time.mktime(datetime.date.today().timetuple())
+            # today_unix_time = int(today_unix_time)
+            # hour_convert = 8
+            # data_send_to_BC.append(
+            #     {'id': str(member.id), 'work_time': str(hour_convert), 'unix_time': str(today_unix_time)}
+            # )
+    # if data_send_to_BC:
+    #     data = {
+    #         'data': data_send_to_BC
+    #     }
+    #     calculate_salary_url = const.BC_SERVER + const.BC_API_CALCULATE_SALARY_USER
+    #     r = requests.post(calculate_salary_url, json=data)
+    #     result = r.json()
 
     return JsonResponse({'ok': 'ok'})
 
@@ -77,31 +72,3 @@ def server_api(request):
     }
     return JsonResponse(http_response)
 
-
-def show_database(request):
-    http_response = {
-        'db': [
-            {
-                'stt': 1,
-                'id': 1,
-                'name': 'Ha Manh Dong',
-                'birth_day': '1995',
-                'class': 'CNTT2.01'
-            },
-            {
-                'stt': 2,
-                'id': 2,
-                'name': 'Ha Manh Dong',
-                'birth_day': '1995',
-                'class': 'CNTT2.01'
-            },
-            {
-                'stt': 3,
-                'id': 3,
-                'name': 'Ha Manh Dong',
-                'birth_day': '1995',
-                'class': 'CNTT2.01'
-            },
-        ]
-    }
-    return JsonResponse(http_response)

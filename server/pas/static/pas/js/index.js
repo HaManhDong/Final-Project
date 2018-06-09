@@ -26,7 +26,7 @@ $(document).ready(function () {
 
     // MQTT client
     let options = {
-        clientId: 'pas',
+        clientId: 'pas_' + Math.random().toString().split('.')[1],
         connectTimeout: MQTT_CONNECT_TIMEOUT,
         hostname: MQTT_HOSTNAME,
         port: MQTT_PORT,
