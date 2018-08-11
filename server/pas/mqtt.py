@@ -7,7 +7,7 @@ import paho.mqtt.client as mqtt
 
 DEVICE_ID = 'pas_server'
 MQTT_HOSTNAME = 'localhost'
-MQTT_PORT = 1883
+MQTT_PORT = 1884
 PUBLISH_TOPIC = "pas/mqtt/icse/auth"
 
 

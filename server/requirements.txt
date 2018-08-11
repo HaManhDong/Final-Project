@@ -2,8 +2,11 @@ Jinja2
 SQLAlchemy
 WTForms
 Pillow
+libmysqlclient-dev
 mysqlclient
 opencv-python
 opencv-contrib-python
 apscheduler
 django-bower
+request
+paho-mqtt
