@@ -47,7 +47,7 @@ ALLOWED_HOSTS = [
 
 INSTALLED_APPS = [
     'pas.apps.PasConfig',
-    # 'django.contrib.admin',
+    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -113,7 +113,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'pas',
         'USER': 'pas_admin',
-        'PASSWORD': 'pas_admin'
+        'PASSWORD': 'pas_admin',
+        'HOST': '0.0.0.0'
     }
 }
 

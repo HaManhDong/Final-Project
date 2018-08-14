@@ -3,13 +3,15 @@
 *.pgm
 *.mp4
 *.webm
-haarcascade_frontalface_default.xml
+#haarcascade_frontalface_default.xml
 faces/*
 galileo_venv/*
 
 *.yml
 tmp/*
 
+server/pas/static/pas/bower_components/*/*
+server/images/video/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

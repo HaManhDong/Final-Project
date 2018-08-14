@@ -2,7 +2,6 @@ Jinja2
 SQLAlchemy
 WTForms
 Pillow
-libmysqlclient-dev
 mysqlclient
 opencv-python
 opencv-contrib-python
